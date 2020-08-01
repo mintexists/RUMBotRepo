@@ -14,7 +14,7 @@ async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Republic of United Members"))
     print("Bot is online.")
 
-#Bot commands 
+#Bot commands
 
 @bot.event
 async def on_message(message):
