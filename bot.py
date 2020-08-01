@@ -25,6 +25,10 @@ async def on_message(message):
 #General Commands
 
     command = message.content.lower()
+    #TEST
+    if command.startswith('r?test':
+        await message.channel.send("Works")
+    
     if command.startswith('r?info'):
         embedVar = discord.Embed(title="RUM Bot", description="Custom bot developed for the Republic of United Members discord server.", color=0xEC00FF)
         embedVar.add_field(name="Version", value="1.0.1", inline=False)
