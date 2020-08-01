@@ -85,3 +85,5 @@ async def on_message(message):
 
 token = open(os.path.join(os.environ['USERPROFILE'], 'My Documents\\token.txt')).read()
 bot.run(token)
+
+#Test
