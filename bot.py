@@ -35,7 +35,7 @@ async def on_message(message):
         embedVar.add_field(name="info", value="Displays bot information.", inline=False)
         await message.channel.send(embed=embedVar)
 
-#Rule commands :
+#Rule commands
 
     if message.content.startswith('r?rule '):
         ruleNum = int(message.content.split(" ")[1])
