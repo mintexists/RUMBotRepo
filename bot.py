@@ -24,18 +24,19 @@ async def on_message(message):
 
 #General Commands
 
-    if message.content.startswith('r?info'):
+    command = message.content.lower()
+    if command.startswith('r?info'):
         embedVar = discord.Embed(title="RUM Bot", description="Custom bot developed for the Republic of United Members discord server.", color=0xEC00FF)
         embedVar.add_field(name="Version", value="1.0.1", inline=False)
         embedVar.add_field(name="Contributors:", value="evalyn#8883, pupo#0001", inline=False)
         await message.channel.send(embed=embedVar)
  
-    if message.content.startswith('r?help'):
+    if command.startswith('r?help'):
         embedVar = discord.Embed(title="Help List", description="Command list. Prefix = r? ", color=0xEC00FF)
         embedVar.add_field(name="help", value="Displays this list.", inline=False)
         embedVar.add_field(name="info", value="Displays bot information.", inline=False)
         await message.channel.send(embed=embedVar)
-    if message.content.startswith('r?coinflip') or message.content.startswith('r?cf'):
+    if command.startswith('r?coinflip') or command.startswith('r?cf'):
         flipside = bool(random.getrandbits(1))
         if (flipside):
             flipside = "Heads"
@@ -45,8 +46,8 @@ async def on_message(message):
 
 #Rule commands
 
-    if message.content.startswith('r?rule '):
-        ruleNum = int(message.content.split(" ")[1])
+    if command.startswith('r?rule '):
+        ruleNum = int(command.split(" ")[1])
         if ruleNum == 1:
             embedVar = discord.Embed(title="- 1 - Keep things civil:", description="Don't make the server too crazy. By all means, have fun and crack some jokes, but we want to make this a safe environment. Swearing is allowed, but don't use words that would be offensive to a person or group.", color=0xEC00FF)
             await message.channel.send(embed=embedVar)
