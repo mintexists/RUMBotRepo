@@ -26,7 +26,7 @@ async def on_message(message):
 
     command = message.content.lower()
     #TEST
-    if command.startswith('r?test':
+    if command.startswith('r?test'):
         await message.channel.send("Works")
     
     if command.startswith('r?info'):
