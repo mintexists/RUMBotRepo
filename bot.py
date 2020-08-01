@@ -5,7 +5,7 @@ import asyncio
 import os
 import random
 
-randNum = random.Random()
+randNum = random.random()
 bot = commands.Bot(command_prefix='<')
 
 #Activity
