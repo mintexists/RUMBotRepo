@@ -3,6 +3,7 @@ from discord.ext    import commands
 from discord.ext.commands   import Bot
 import asyncio
 import os
+import random
 
 bot = commands.Bot(command_prefix='<')
 
@@ -34,6 +35,13 @@ async def on_message(message):
         embedVar.add_field(name="help", value="Displays this list.", inline=False)
         embedVar.add_field(name="info", value="Displays bot information.", inline=False)
         await message.channel.send(embed=embedVar)
+    if message.content.startswith('r?coinflip') or message.content.startswith('r?cf'):
+        flipside = bool(random.getrandbits(1))
+        if (flipside):
+            flipside = "Heads"
+        else:
+            flipside = "Tails"
+        await message.channel.send("The coin landed on " + flipside)
 
 #Rule commands
 
