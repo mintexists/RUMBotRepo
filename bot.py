@@ -5,6 +5,7 @@ import asyncio
 import os
 import random
 
+randNum = random.Random()
 bot = commands.Bot(command_prefix='<')
 
 #Activity
@@ -27,7 +28,7 @@ async def on_message(message):
     command = message.content.lower()
     #TEST
     if command.startswith('r?test'):
-        await message.channel.send("Works")
+        await message.channel.send(randNum)
     
     if command.startswith('r?info'):
         embedVar = discord.Embed(title="RUM Bot", description="Custom bot developed for the Republic of United Members discord server.", color=0xEC00FF)
