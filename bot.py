@@ -22,7 +22,7 @@ async def on_message(message):
         await message.add_reaction("✅")
         await message.add_reaction("❌")
 
-#General Commands    
+#General Commands
 
     if message.content.startswith('r?info'):
         embedVar = discord.Embed(title="RUM Bot", description="Custom bot developed for the Republic of United Members discord server.", color=0xEC00FF)
