@@ -1,19 +1,17 @@
 import discord
-from discord.ext    import commands
-from discord.ext.commands   import Bot
 import asyncio
 import os
 import random
 
 randNum = random.random()
-bot = commands.Bot(command_prefix='<')
+bot = discord.Client()
 
 #Activity
 
 @bot.event
 async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Republic of United Members"))
-    print("Bot is online.")
+    print("Bot is online. Instance ID is " + randNum)
 
 #Bot commands
 
