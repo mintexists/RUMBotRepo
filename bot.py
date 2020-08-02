@@ -93,7 +93,7 @@ async def on_raw_reaction_add(payload):
             reaction = get(message.reactions, emoji=payload.emoji.name)
             if reaction and reaction.count > 5:
                 await bot.get_channel(739172158948900925).send("✅ Approved" + "\n> " + message.content + "\n(" + message.author.mention + ")")
-                await message.delete() 
+                await message.delete()
         elif payload.emoji.name == "❌":
             channel = bot.get_channel(737807052625412208)
             message = await channel.fetch_message(payload.message_id)
