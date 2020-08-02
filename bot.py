@@ -12,7 +12,7 @@ bot = discord.Client()
 @bot.event
 async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Republic of United Members"))
-    print("Bot is online. Instance ID is " + randNum)
+    print("Bot is online. Instance ID is " + str(randNum))
 
 #Bot commands
 
@@ -92,14 +92,16 @@ async def on_raw_reaction_add(payload):
             channel = bot.get_channel(737807052625412208)
             message = await channel.fetch_message(payload.message_id)
             reaction = get(message.reactions, emoji=payload.emoji.name)
-            if reaction and reaction.count > 6:
-                await bot.get_channel(737807052625412208).send("✅ Approved" + "\n" + message.content + "\n(" + message.author.mention + ")")
+            if reaction and reaction.count > 5:
+                await bot.get_channel(739172158948900925).send("✅ Approved" + "\n> " + message.content + "\n(" + message.author.mention + ")")
+                await message.delete() 
         elif payload.emoji.name == "❌":
             channel = bot.get_channel(737807052625412208)
             message = await channel.fetch_message(payload.message_id)
             reaction = get(message.reactions, emoji=payload.emoji.name)
-            if reaction and reaction.count > 6:
-                await bot.get_channel(737807052625412208).send("❌ Denied" + "\n" + message.content + "\n(" + message.author.mention + ")")
+            if reaction and reaction.count > 5:
+                await bot.get_channel(739172158948900925).send("❌ Denied" + "\n> " + message.content + "\n(" + message.author.mention + ")")
+                await message.delete()
 
 
 
