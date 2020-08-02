@@ -3,10 +3,12 @@ from discord.utils import get
 import asyncio
 import os
 import random
+import collections
+import time
 
 randNum = random.random()
 bot = discord.Client()
-
+bot.suggestQueue=collections.deque()
 #Activity
 
 @bot.event
@@ -14,6 +16,15 @@ async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Republic of United Members"))
     print("Bot is online. Instance ID is " + str(randNum))
 
+async def checkSuggestions():
+    while True:
+        if suggestQueue:
+            suggestion=suggestQueue[0]
+            if time.time()-suggestion[1]>(6)*3600:
+        embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
+        await bot.get_channel(739172158948900925).send(embed=embedVar)
+        await message.delete()
+        
 #Bot commands
 def getLine(fileName,lineNum):
     lines=[]
@@ -27,7 +38,7 @@ async def on_message(message):
     if message.channel.id == 737807052625412208:
         await message.add_reaction("✅")
         await message.add_reaction("❌")
-
+        bot.suggestQueue.append((message,time.time()))
 #General Commands
 
     command = message.content.lower()
