@@ -1,4 +1,5 @@
 import discord
+from discord.utils import get
 import asyncio
 import os
 import random
@@ -83,6 +84,23 @@ async def on_message(message):
             await message.channel.send(embed=embedVar)
         else:
             await message.channel.send("Invalid Rule Number")
+
+@bot.event
+async def on_raw_reaction_add(payload):
+    if payload.channel_id == 737807052625412208:
+        if payload.emoji.name == "✅":
+            channel = bot.get_channel(737807052625412208)
+            message = await channel.fetch_message(payload.message_id)
+            reaction = get(message.reactions, emoji=payload.emoji.name)
+            if reaction and reaction.count > 6:
+                await bot.get_channel(737807052625412208).send("✅ Approved" + "\n" + message.content + "\n(" + message.author.mention + ")")
+        elif payload.emoji.name == "❌":
+            channel = bot.get_channel(737807052625412208)
+            message = await channel.fetch_message(payload.message_id)
+            reaction = get(message.reactions, emoji=payload.emoji.name)
+            if reaction and reaction.count > 6:
+                await bot.get_channel(737807052625412208).send("❌ Denied" + "\n" + message.content + "\n(" + message.author.mention + ")")
+
 
 
 #Bot Token
