@@ -25,7 +25,6 @@ async def on_message(message):
 #General Commands
 
     command = message.content.lower()
-    #TEST
     if command.startswith('r?test'):
         await message.channel.send(randNum)
     
