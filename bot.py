@@ -38,6 +38,7 @@ async def on_message(message):
         embedVar = discord.Embed(title="Help List", description="Command list. Prefix = r? ", color=0xEC00FF)
         embedVar.add_field(name="help", value="Displays this list.", inline=False)
         embedVar.add_field(name="info", value="Displays bot information.", inline=False)
+        embedVar.add_field(name="coinflip or cf", value="flip a coin", inline=False)
         await message.channel.send(embed=embedVar)
     if command.startswith('r?coinflip') or command.startswith('r?cf'):
         flipside = bool(random.getrandbits(1))
