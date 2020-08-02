@@ -58,7 +58,7 @@ async def on_message(message):
 
     if command.startswith('r?rule '):
         ruleNum = int(command.split(" ")[1])
-        if 1<=ruleNum<=10:
+        if 1<=ruleNum<=9:
             embedVar = discord.Embed(title=getLines("rules.txt",2*ruleNum-1), description=getLine("rules.txt",2*ruleNum), color=0xEC00FF)
             await message.channel.send(embed=embedVar)
         else:
