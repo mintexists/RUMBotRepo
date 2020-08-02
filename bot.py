@@ -93,7 +93,7 @@ async def on_raw_reaction_add(payload):
             reaction = get(message.reactions, emoji=payload.emoji.name)
             if reaction and reaction.count > 5:
                 embedVar = discord.Embed(title="✅ Approved", description= + message.content , color=0xEC00FF)
-                embedVar.add_field(name="Suggested by:", value= + msesage.author.mention, inline=False))
+                embedVar.add_field(name="Suggested by:", value= + message.author.mention, inline=False)
                 await bot.get_channel(739172158948900925).send(embed=embedVar)
                 await message.delete()
         elif payload.emoji.name == "❌":
@@ -102,8 +102,8 @@ async def on_raw_reaction_add(payload):
             reaction = get(message.reactions, emoji=payload.emoji.name)
             if reaction and reaction.count > 5:
                 embedVar = discord.Embed(title="❌ Denied", description= + message.content , color=0xEC00FF)
-                embedVar.add_field(name="Suggested by:", value= + msesage.author.mention, inline=False))
-                await bot.get_channel(739172158948900925).send(embed=EmbedVar)
+                embedVar.add_field(name="Suggested by:", value= + message.author.mention, inline=False)
+                await bot.get_channel(739172158948900925).send(embed=embedVar)
                 await message.delete()
 
 
