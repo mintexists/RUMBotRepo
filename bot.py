@@ -16,7 +16,7 @@ async def checkSuggestions():
     while True:
         if bot.suggestQueue:
             message=bot.suggestQueue[0]
-            if (message.created_at.utcnow()-message.created_at).seconds>(6)*5 or (message.created_at.utcnow()-message.created_at).days>0:
+            if (message.created_at.utcnow()-message.created_at).seconds>(6)*3600 or (message.created_at.utcnow()-message.created_at).days>0:
                 message=bot.suggestQueue.popleft()
                 approvals = get(message.reactions, emoji="✅")
                 denials = get(message.reactions, emoji="❌")
