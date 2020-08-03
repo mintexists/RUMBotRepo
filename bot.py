@@ -34,6 +34,7 @@ async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Republic of United Members"))
     bot.loop.create_task(checkSuggestions())
     print("Bot is online. Instance ID is " + str(randNum))
+    await bot.get_channel(738951182969602078).send("Bot is online. Instance ID is " + str(randNum))
 
 
         
