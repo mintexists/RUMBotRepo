@@ -89,7 +89,7 @@ async def on_raw_reaction_add(payload):
 @bot.event
 async def on_member_join(member):
     if member.bot == False:
-        bot.get_channel(736310120199225365).send(member.guild.get_role(736316470098657342).mention() + " " + member.guild.get_role(739197317537726475).mention() + " A new member has joined")
+        await bot.get_channel(736310120199225365).send(member.guild.get_role(736316470098657342).mention + " " + member.guild.get_role(739197317537726475).mention + " A new member has joined")
 
 
 
