@@ -59,7 +59,7 @@ async def on_message(message):
     if command.startswith('r?rule '):
         ruleNum = int(command.split(" ")[1])
         if 1<=ruleNum<=9:
-            embedVar = discord.Embed(title=getLines("rules.txt",2*ruleNum-1), description=getLine("rules.txt",2*ruleNum), color=0xEC00FF)
+            embedVar = discord.Embed(title=getLine("rules.txt",2*ruleNum-1), description=getLine("rules.txt",2*ruleNum), color=0xEC00FF)
             await message.channel.send(embed=embedVar)
         else:
             await message.channel.send("Invalid Rule Number")
@@ -85,6 +85,12 @@ async def on_raw_reaction_add(payload):
                 embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
                 await bot.get_channel(739172158948900925).send(embed=embedVar)
                 await message.delete()
+
+@bot.event
+async def on_member_join(member):
+    if member.bot == False:
+        bot.get_channel(736310120199225365).send(member.guild.get_role(736316470098657342).mention() + " " + member.guild.get_role(739197317537726475).mention() + " A new member has joined")
+
 
 
 
