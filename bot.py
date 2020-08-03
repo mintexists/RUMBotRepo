@@ -4,32 +4,41 @@ import asyncio
 import os
 import random
 import collections
-import time
+import datetime
 
 randNum = random.random()
 bot = discord.Client()
 bot.suggestQueue=collections.deque()
 #Activity
 
-@bot.event
-async def on_ready():
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Republic of United Members"))
-    print("Bot is online. Instance ID is " + str(randNum))
-
 async def checkSuggestions():
     while True:
-        if suggestQueue:
-            suggestion=suggestQueue[0]
-            if time.time()-suggestion[1]>(6)*3600:
+        if bot.suggestQueue:
+            message=bot.suggestQueue[0]
+            if (message.created_at.now()-message.created_at).seconds>(6)*3600 or (message.created_at.now()-message.created_at).days>0:
+                message=bot.suggestQueue.popleft()
+                approvals = get(message.reactions, emoji="✅")
+                denials = get(message.reactions, emoji="❌")
+                if approvals>denials:
+                    embedVar = discord.Embed(title="✅ Approved", description = message.content , color=0xEC00FF)
+                else:
+                    embedVar = discord.Embed(title="❌ Denied", description = message.content , color=0xEC00FF)
         embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
         await bot.get_channel(739172158948900925).send(embed=embedVar)
         await message.delete()
+
+@bot.event
+async def on_ready():
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Republic of United Members"))
+    await bot.loop.start_task(checkSuggestions)
+    print("Bot is online. Instance ID is " + str(randNum))
+
+
         
 #Bot commands
 def getLine(fileName,lineNum):
-    lines=[]
     fh=open(fileName)
-    for i, row in enumerate(): 
+    for i, row in enumerate(fh): 
         if i+1==lineNum: 
             return row
 
@@ -38,7 +47,7 @@ async def on_message(message):
     if message.channel.id == 737807052625412208:
         await message.add_reaction("✅")
         await message.add_reaction("❌")
-        bot.suggestQueue.append((message,time.time()))
+        bot.suggestQueue.append(message)
 #General Commands
 
     command = message.content.lower()
@@ -70,32 +79,14 @@ async def on_message(message):
     if command.startswith('r?rule '):
         ruleNum = int(command.split(" ")[1])
         if 1<=ruleNum<=9:
-            embedVar = discord.Embed(title=getLines("rules.txt",2*ruleNum-1), description=getLine("rules.txt",2*ruleNum), color=0xEC00FF)
+            embedVar = discord.Embed(title=getLine("rules.txt",2*ruleNum-1), description=getLine("rules.txt",2*ruleNum), color=0xEC00FF)
             await message.channel.send(embed=embedVar)
         else:
             await message.channel.send("Invalid Rule Number")
 
 @bot.event
 async def on_raw_reaction_add(payload):
-    if payload.channel_id == 737807052625412208:
-        if payload.emoji.name == "✅":
-            channel = bot.get_channel(737807052625412208)
-            message = await channel.fetch_message(payload.message_id)
-            reaction = get(message.reactions, emoji=payload.emoji.name)
-            if reaction and reaction.count > 5:
-                embedVar = discord.Embed(title="✅ Approved", description = message.content , color=0xEC00FF)
-                embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
-                await bot.get_channel(739172158948900925).send(embed=embedVar)
-                await message.delete()
-        elif payload.emoji.name == "❌":
-            channel = bot.get_channel(737807052625412208)
-            message = await channel.fetch_message(payload.message_id)
-            reaction = get(message.reactions, emoji=payload.emoji.name)
-            if reaction and reaction.count > 5:
-                embedVar = discord.Embed(title="❌ Denied", description = message.content , color=0xEC00FF)
-                embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
-                await bot.get_channel(739172158948900925).send(embed=embedVar)
-                await message.delete()
+    pass
 
 
 
