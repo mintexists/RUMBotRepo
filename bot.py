@@ -40,7 +40,7 @@ async def on_ready():
     await updateSuggestions()
     bot.loop.create_task(checkSuggestions())
     print("Bot is online. Instance ID is " + str(randNum))
-    await bot.get_channel(738951182969602078).send("Bot is online. Instance ID is " + str(randNum))
+    await bot.get_channel(740049560591925362).send("Bot is online. Instance ID is " + str(randNum))
 
 
         
