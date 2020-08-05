@@ -120,8 +120,14 @@ async def on_member_join(member):
 
 
 
-#Bot Token
-# Reads from token.txt in users documents folder
+# Bot Token
+# SET THE ENVIORMENT VARIABLE TOKEN TO EQUAL THE TOKEN
+# To set it on windows do set TOKEN=token
+# linux u can set it with export TOKEN=token
+# im watchging the simpsons rn and flanders seems like a bad dad
+# is flanders supposed to be seen as a bad dad or is he supposed to be seen as a good dad
+# im boredddddddd
+# these are all test commits because im too lazy for other stuff
 
-token = open(os.path.join(os.environ['USERPROFILE'], 'Documents\\token.txt')).read()
+token = str(os.getenv('TOKEN'))
 bot.run(token)
