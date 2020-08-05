@@ -127,6 +127,7 @@ async def on_member_join(member):
 # im watchging the simpsons rn and flanders seems like a bad dad
 # is flanders supposed to be seen as a bad dad or is he supposed to be seen as a good dad
 # im boredddddddd
+# these are all test commits because im too lazy for other stuff
 
 token = str(os.getenv('TOKEN'))
 bot.run(token)
