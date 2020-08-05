@@ -126,6 +126,7 @@ async def on_member_join(member):
 # linux u can set it with export TOKEN=token
 # im watchging the simpsons rn and flanders seems like a bad dad
 # is flanders supposed to be seen as a bad dad or is he supposed to be seen as a good dad
+# im boredddddddd
 
 token = str(os.getenv('TOKEN'))
 bot.run(token)
