@@ -6,6 +6,8 @@ import random
 import collections
 import datetime
 
+prefix = "r?"
+
 randNum = random.random()
 bot = discord.Client()
 bot.suggestQueue=collections.deque()
@@ -40,7 +42,7 @@ async def on_ready():
     await updateSuggestions()
     bot.loop.create_task(checkSuggestions())
     print("Bot is online. Instance ID is " + str(randNum))
-    await bot.get_channel(738951182969602078).send("Bot is online. Instance ID is " + str(randNum))
+    await bot.get_channel(740049560591925362).send("Bot is online. Instance ID is " + str(randNum))
 
 
         
@@ -60,32 +62,32 @@ async def on_message(message):
 #General Commands
 
     command = message.content.lower()
-    if command.startswith('r?test'):
+    if command.startswith(prefix + 'test'):
         await message.channel.send(randNum)
     
-    if command.startswith('r?info'):
+    if command.startswith(prefix + 'info'):
         embedVar = discord.Embed(title="RUM Bot", description="Custom bot developed for the Republic of United Members discord server.", color=0xEC00FF)
         embedVar.add_field(name="Version", value="1.0.1", inline=False)
         embedVar.add_field(name="Contributors:", value="evalyn#8883, pupo#0001", inline=False)
         await message.channel.send(embed=embedVar)
  
-    if command.startswith('r?help'):
+    if command.startswith(prefix + 'help'):
         embedVar = discord.Embed(title="Help List", description="Command list. Prefix = r? ", color=0xEC00FF)
         embedVar.add_field(name="help", value="Displays this list.", inline=False)
         embedVar.add_field(name="info", value="Displays bot information.", inline=False)
         embedVar.add_field(name="coinflip or cf", value="flip a coin", inline=False)
         await message.channel.send(embed=embedVar)
-    if command.startswith('r?coinflip') or command.startswith('r?cf'):
+    if command.startswith(prefix + 'coinflip') or command.startswith(prefix + 'cf'):
         flipside = bool(random.getrandbits(1))
         if (flipside):
             flipside = "Heads"
         else:
             flipside = "Tails"
-        await message.channel.send("The coin landed on " + flipside)
+        await message.channel.send("> The coin landed on " + flipside)
 
 #Rule commands
 
-    if command.startswith('r?rule '):
+    if command.startswith(prefix + 'rule '):
         ruleNum = int(command.split(" ")[1])
         if 1<=ruleNum<=9:
             embedVar = discord.Embed(title=getLine("rules.txt",2*ruleNum-1), description=getLine("rules.txt",2*ruleNum), color=0xEC00FF)
@@ -94,8 +96,21 @@ async def on_message(message):
             await message.channel.send("Invalid Rule Number")
 
 @bot.event
-async def on_raw_reaction_add(payload):
-    pass
+async def on_reaction_add(reaction, user):
+    if reaction.message.channel.id == 737807052625412208 and user != bot.user:
+        if reaction.emoji == "✅":
+            await reaction.message.remove_reaction("✅", bot.user)
+        elif reaction.emoji == "❌":
+            await reaction.message.remove_reaction("❌", bot.user)
+
+@bot.event
+async def on_reaction_remove(reaction, user):
+    if reaction.message.channel.id == 737807052625412208:
+        if get(reaction.message.reactions, emoji="✅") is None:
+            await reaction.message.add_reaction("✅")
+        elif get(reaction.message.reactions, emoji="❌") is None:
+            await reaction.message.add_reaction("❌")
+
 
 @bot.event
 async def on_member_join(member):
@@ -106,6 +121,7 @@ async def on_member_join(member):
 
 
 #Bot Token
+# Reads from token.txt in users documents folder
 
 token = open(os.path.join(os.environ['USERPROFILE'], 'Documents\\token.txt')).read()
 bot.run(token)
