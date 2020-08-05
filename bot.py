@@ -121,7 +121,8 @@ async def on_member_join(member):
 
 
 #Bot Token
-# Reads from token.txt in users documents folder
+# SET THE ENVIORMENT VARIABLE TOKEN TO EQUAL THE TOKEN
+# Im p sure u do this with the set command idk ill look it up
 
 token = str(os.getenv('TOKEN'))
 bot.run(token)
