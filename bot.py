@@ -28,9 +28,9 @@ async def checkSuggestions():
                 approvals = get(message.reactions, emoji="✅")
                 denials = get(message.reactions, emoji="❌")
                 if approvals.count>denials.count:
-                    embedVar = discord.Embed(title="✅ Approved", description = message.content , color=0xEC00FF)
+                    embedVar = discord.Embed(title="✅ Approved", description = message.content , color=0x00FF04)
                 else:
-                    embedVar = discord.Embed(title="❌ Denied", description = message.content , color=0xEC00FF)
+                    embedVar = discord.Embed(title="❌ Denied", description = message.content , color=0xFF0000)
                 embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
                 await bot.get_channel(739172158948900925).send(embed=embedVar)
                 await message.delete()
