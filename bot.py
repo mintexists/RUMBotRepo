@@ -122,7 +122,7 @@ async def on_member_join(member):
 
 #Bot Token
 # SET THE ENVIORMENT VARIABLE TOKEN TO EQUAL THE TOKEN
-# Im p sure u do this with the set command idk ill look it up
+# To set it on windows do set TOKEN=token
 
 token = str(os.getenv('TOKEN'))
 bot.run(token)
