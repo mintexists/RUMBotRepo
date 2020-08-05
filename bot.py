@@ -66,16 +66,20 @@ async def on_message(message):
         await message.channel.send(randNum)
     
     if command.startswith(prefix + 'info'):
-        embedVar = discord.Embed(title="RUM Bot", description="Custom bot developed for the Republic of United Members discord server.", color=0xEC00FF)
-        embedVar.add_field(name="Version", value="1.0.1", inline=False)
-        embedVar.add_field(name="Contributors:", value="evalyn#8883, pupo#0001", inline=False)
+        embedVar =discord.Embed(title="RUM Bot", description="Custom bot developed for the Republic of United Members discord server.", color=0xd400ff)
+        embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/740711482391658567/botpic_2.png")
+        embedVar.add_field(name="Version -", value="1.1.3", inline=True)
+        embedVar.add_field(name="Contributors -", value="evalyn#8883, pupo#0001, MrMeme#5096", inline=True)
+        embedVar.set_footer(text="Any questions? DM one of the contributors!")
         await message.channel.send(embed=embedVar)
  
     if command.startswith(prefix + 'help'):
-        embedVar = discord.Embed(title="Help List", description="Command list. Prefix = r? ", color=0xEC00FF)
-        embedVar.add_field(name="help", value="Displays this list.", inline=False)
-        embedVar.add_field(name="info", value="Displays bot information.", inline=False)
-        embedVar.add_field(name="coinflip or cf", value="flip a coin", inline=False)
+        embedVar=discord.Embed(title="RUM Bot Command List", description="List containing all bot commands.", color=0xfb00ff)
+        embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/740711482391658567/botpic_2.png")
+        embedVar.add_field(name="r?help", value="Displays this list.", inline=True)
+        embedVar.add_field(name="r?info", value="Displays bot info.", inline=True)
+        embedVar.add_field(name="r?coinflip or cf", value="Flips a coin.", inline=True)
+        embedVar.set_footer(text="Any questions? Ask one of the contributors! Any Suggestions? Put them in #suggestions!")
         await message.channel.send(embed=embedVar)
     if command.startswith(prefix + 'coinflip') or command.startswith(prefix + 'cf'):
         flipside = bool(random.getrandbits(1))
