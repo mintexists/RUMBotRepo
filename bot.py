@@ -123,5 +123,5 @@ async def on_member_join(member):
 #Bot Token
 # Reads from token.txt in users documents folder
 
-token = open(os.path.join(os.environ['USERPROFILE'], 'Documents\\token.txt')).read()
+token = os.getenv('TOKEN')
 bot.run(token)
