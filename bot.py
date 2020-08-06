@@ -42,7 +42,9 @@ async def on_ready():
     await updateSuggestions()
     bot.loop.create_task(checkSuggestions())
     print("Bot is online. Instance ID is " + str(randNum))
-    await bot.get_channel(740049560591925362).send("Bot is online. Instance ID is " + str(randNum))
+    embedVar=discord.Embed(title=":green_circle: Bot is online", color=0x00ff62)
+    embedVar.add_field(name="Instance ID:", value= + (randNum), inline=True)
+    await bot.get_channel(740049560591925362).send(embed=embedVar)
 
 
         
@@ -63,7 +65,9 @@ async def on_message(message):
 
     command = message.content.lower()
     if command.startswith(prefix + 'test'):
-        await message.channel.send(randNum)
+        embedVar=discord.Embed(title="Current running instances", description="List of current client IDs.", color=0x00ff62)
+        embedVar.add_field(name="Instance IDs:", value= + (randNum), inline=True)
+        await message.channel.send(embed=embedVar)
     
     if command.startswith(prefix + 'info'):
         embedVar =discord.Embed(title="RUM Bot", description="Custom bot developed for the Republic of United Members discord server.", color=0xd400ff)
