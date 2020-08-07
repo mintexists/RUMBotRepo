@@ -76,6 +76,15 @@ async def on_message(message):
         embedVar.add_field(name="Contributors -", value="evalyn#8883, pupo#0001, MrMeme#5096", inline=True)
         embedVar.set_footer(text="Any questions? DM one of the contributors!")
         await message.channel.send(embed=embedVar)
+        
+    if command.startswith(prefix + 'server'):
+        embedVar=discord.Embed(title="Republic of United Members", description="Casual server focused around fairness and democracy. ")
+        embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/740711351152017458/e20176f3cfe1fc2d0edc24005d749a8b_2.png")
+        embedVar.add_field(name="Creation Date:", value= message.guild.created_at, inline=True)
+        embedVar.add_field(name="Member Count:", value= message.guild.member_count, inline=True)
+        embedVar.add_field(name="Current Consuls:", value="RaccWillAttacc#3661, FlobbsterBisque#5674", inline=True)
+        #embedVar.add_field(name="Server Age:", value= discord.Guild.created_at.utcnow() -discord.Guild.created_at, inline=True)
+        await message.channel.send(embed=embedVar)
  
     if command.startswith(prefix + 'help'):
         embedVar=discord.Embed(title="RUM Bot Command List", description="List containing all bot commands.", color=0xfb00ff)
