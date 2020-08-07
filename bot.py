@@ -11,7 +11,8 @@ prefix = "r?"
 randNum = random.random()
 bot = discord.Client()
 bot.suggestQueue=collections.deque()
-#Activity
+
+# Activity
 async def updateSuggestions():
     channel=bot.get_channel(737807052625412208)
     async for message in channel.history(oldest_first=True):
@@ -57,13 +58,15 @@ async def getLine(fileName,lineNum):
 
 @bot.event
 async def on_message(message):
+    command = message.content.lower()
+
+    # Add reaction to the suggestions
     if message.channel.id == 737807052625412208:
         await message.add_reaction("✅")
         await message.add_reaction("❌")
         bot.suggestQueue.append(message)
-#General Commands
 
-    command = message.content.lower()
+    # General Commands
     if command.startswith(prefix + 'test'):
         embedVar=discord.Embed(title="Current running instances", description="List of current client IDs.", color=0x00ff62)
         embedVar.add_field(name="Instance IDs:", value= + (randNum), inline=True)
@@ -94,6 +97,7 @@ async def on_message(message):
         embedVar.add_field(name="r?coinflip or cf", value="Flips a coin.", inline=True)
         embedVar.set_footer(text="Any questions? Ask one of the contributors! Any Suggestions? Put them in #suggestions!")
         await message.channel.send(embed=embedVar)
+
     if command.startswith(prefix + 'coinflip') or command.startswith(prefix + 'cf'):
         flipside = bool(random.getrandbits(1))
         if (flipside):
@@ -101,8 +105,6 @@ async def on_message(message):
         else:
             flipside = "Tails"
         await message.channel.send("> The coin landed on " + flipside)
-
-#Rule commands
 
     if command.startswith(prefix + 'rule '):
         ruleNum = int(command.split(" ")[1])
@@ -114,6 +116,7 @@ async def on_message(message):
 
 @bot.event
 async def on_reaction_add(reaction, user):
+    # Remove reaction to make suggestion value accurate
     if reaction.message.channel.id == 737807052625412208 and user != bot.user:
         if reaction.emoji == "✅":
             await reaction.message.remove_reaction("✅", bot.user)
@@ -122,6 +125,7 @@ async def on_reaction_add(reaction, user):
 
 @bot.event
 async def on_reaction_remove(reaction, user):
+    # Re-add reaction if there is none
     if reaction.message.channel.id == 737807052625412208:
         if get(reaction.message.reactions, emoji="✅") is None:
             await reaction.message.add_reaction("✅")
@@ -131,14 +135,14 @@ async def on_reaction_remove(reaction, user):
 
 @bot.event
 async def on_member_join(member):
+    # Ping welcomer and consulate weh na new member joins the server
     if member.bot == False:
         await bot.get_channel(736310120199225365).send(member.guild.get_role(736316470098657342).mention + " " + member.guild.get_role(739197317537726475).mention + " A new member has joined")
 
 
 
 
-# Bot Token
-# SET THE ENVIORMENT VARIABLE TOKEN TO EQUAL THE TOKEN
+# Reads the enviorment variable token for the token value
 # To set it on windows do set TOKEN=token
 # linux u can set it with export TOKEN=token
 # Macos is probs the same as linux
