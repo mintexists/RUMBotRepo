@@ -30,8 +30,10 @@ async def checkSuggestions():
                 denials = get(message.reactions, emoji="❌")
                 if approvals.count>denials.count:
                     embedVar = discord.Embed(title="✅ Approved", description = message.content , color=0x00FF04)
+                    print("✅ Approved: \n" + message.content)
                 else:
                     embedVar = discord.Embed(title="❌ Denied", description = message.content , color=0xFF0000)
+                    print("❌ Denied: \n" + message.content)
                 embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
                 await bot.get_channel(739172158948900925).send(embed=embedVar)
                 await message.delete()
@@ -65,14 +67,17 @@ async def on_message(message):
         await message.add_reaction("✅")
         await message.add_reaction("❌")
         bot.suggestQueue.append(message)
+        print("New Suggestion: " + message.content)
 
     # General Commands
     if command.startswith(prefix + 'test'):
+        print("Test Called")
         embedVar=discord.Embed(title="Current running instances", description="List of current client IDs.", color=0x00ff62)
         embedVar.add_field(name="Instance IDs:", value= + (randNum), inline=True)
         await message.channel.send(embed=embedVar)
     
     if command.startswith(prefix + 'info'):
+        print("Info Called")
         embedVar =discord.Embed(title="RUM Bot", description="Custom bot developed for the Republic of United Members discord server.", color=0xd400ff)
         embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/740711482391658567/botpic_2.png")
         embedVar.add_field(name="Version -", value="1.1.3", inline=True)
@@ -81,6 +86,7 @@ async def on_message(message):
         await message.channel.send(embed=embedVar)
         
     if command.startswith(prefix + 'server'):
+        print("Server Called")
         embedVar=discord.Embed(title="Republic of United Members", description="Casual server focused around fairness and democracy. ")
         embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/740711351152017458/e20176f3cfe1fc2d0edc24005d749a8b_2.png")
         embedVar.add_field(name="Creation Date:", value= message.guild.created_at, inline=True)
@@ -90,6 +96,7 @@ async def on_message(message):
         await message.channel.send(embed=embedVar)
  
     if command.startswith(prefix + 'help'):
+        print("Help Called")
         embedVar=discord.Embed(title="RUM Bot Command List", description="List containing all bot commands.", color=0xfb00ff)
         embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/740711482391658567/botpic_2.png")
         embedVar.add_field(name="r?help", value="Displays this list.", inline=True)
@@ -104,10 +111,12 @@ async def on_message(message):
             flipside = "Heads"
         else:
             flipside = "Tails"
+        print("Coin Flipped and Landed on " + flipside)
         await message.channel.send("> The coin landed on " + flipside)
 
     if command.startswith(prefix + 'rule '):
         ruleNum = int(command.split(" ")[1])
+        print("Rule " + ruleNum + " Called")
         if 1<=ruleNum<=9:
             embedVar = discord.Embed(title=await getLine("rules.txt",2*ruleNum-1), description=await getLine("rules.txt",2*ruleNum), color=0xEC00FF)
             await message.channel.send(embed=embedVar)
@@ -138,6 +147,7 @@ async def on_member_join(member):
     # Ping welcomer and consulate weh na new member joins the server
     if member.bot == False:
         await bot.get_channel(736310120199225365).send(member.guild.get_role(736316470098657342).mention + " " + member.guild.get_role(739197317537726475).mention + " A new member has joined")
+    print("Member Joined")
 
 
 
