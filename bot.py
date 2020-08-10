@@ -46,7 +46,7 @@ async def on_ready():
     bot.loop.create_task(checkSuggestions())
     print("Bot is online. Instance ID is " + str(randNum))
     embedVar=discord.Embed(title=":green_circle: Bot is online", color=0x00ff62)
-    embedVar.add_field(name="Instance ID:", value= + (randNum), inline=True)
+    embedVar.add_field(name="Instance ID:", value= randNum, inline=True)
     await bot.get_channel(740049560591925362).send(embed=embedVar)
 
 
@@ -73,7 +73,7 @@ async def on_message(message):
     if command.startswith(prefix + 'test'):
         print("Test Called")
         embedVar=discord.Embed(title="Current running instances", description="List of current client IDs.", color=0x00ff62)
-        embedVar.add_field(name="Instance IDs:", value= + (randNum), inline=True)
+        embedVar.add_field(name="Instance IDs:", value= randNum, inline=True)
         await message.channel.send(embed=embedVar)
     
     if command.startswith(prefix + 'info'):
