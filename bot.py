@@ -156,6 +156,8 @@ async def on_member_join(member):
 # To set it on windows do set TOKEN=token
 # linux u can set it with export TOKEN=token
 # Macos is probs the same as linux
+# Homer got a divorce so he could marry again thats so sweet
+# imma buy a skirt tommriow
 
 token = str(os.getenv('TOKEN'))
 bot.run(token)
