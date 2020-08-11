@@ -74,7 +74,7 @@ async def on_message(message):
     if command.startswith(prefix + 'test'):
         print("Test Called")
         embedVar=discord.Embed(title="\[ID\]", description= str(randNum), color=0x00ff62)
-        await message.channel.send("A GODDAMN WORD", embed=embedVar)
+        await message.channel.send(embed=embedVar)
     
     if command.startswith(prefix + 'info'):
         print("Info Called")
