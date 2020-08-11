@@ -102,6 +102,7 @@ async def on_message(message):
         embedVar.add_field(name="r?help", value="Displays this list.", inline=True)
         embedVar.add_field(name="r?info", value="Displays bot info.", inline=True)
         embedVar.add_field(name="r?coinflip or cf", value="Flips a coin.", inline=True)
+        embedVar.add_field(name="r?bubblewrap or wb", value="Makes a bubblewrap with text or emote", inline=True)
         embedVar.add_field(name="r?test", value="Sends the bot instance IDs", inline=True)
         embedVar.set_footer(text="Any questions? Ask one of the contributors! Any Suggestions? Put them in #suggestions!")
         await message.channel.send(embed=embedVar)
