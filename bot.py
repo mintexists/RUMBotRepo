@@ -35,7 +35,7 @@ async def checkSuggestions():
                     embedVar = discord.Embed(title="❌ Denied", description = message.content , color=0xFF0000)
                     print("❌ Denied: \n" + message.content)
                 embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
-                embedVar.add_field(name="Votes:", value = "you put ur code here", inline=False)
+                embedVar.add_field(name="Votes:", value = "✅ " + str(approvals.count) + " ❌ " + str(denials.count) , inline=False)
                 await bot.get_channel(739172158948900925).send(embed=embedVar)
                 await message.delete()
         await asyncio.sleep(5)
