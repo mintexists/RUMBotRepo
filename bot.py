@@ -35,6 +35,7 @@ async def checkSuggestions():
                     embedVar = discord.Embed(title="❌ Denied", description = message.content , color=0xFF0000)
                     print("❌ Denied: \n" + message.content)
                 embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
+                embedVar.add_field(name="Votes:", value = "you put ur code here", inline=False)
                 await bot.get_channel(739172158948900925).send(embed=embedVar)
                 await message.delete()
         await asyncio.sleep(5)
@@ -72,8 +73,7 @@ async def on_message(message):
     # General Commands
     if command.startswith(prefix + 'test'):
         print("Test Called")
-        embedVar=discord.Embed(title="Current running instances", description="List of current client IDs.", color=0x00ff62)
-        embedVar.add_field(name="Instance IDs:", value= randNum, inline=True)
+        embedVar=discord.Embed(title="[ID]", description= randNum, color=0x00ff62)
         await message.channel.send("A GODDAMN WORD", embed=embedVar)
     
     if command.startswith(prefix + 'info'):
