@@ -125,8 +125,7 @@ async def on_message(message):
             await message.channel.send("Invalid Rule Number")
 
     if command.startswith(prefix + 'bubblewrap '):
-        bubble = "||" + str(command.split(" ")[1]) + "||"
-        bubble = ((bubble*10) + "\n")*10
+        bubble = ((("||" + str(command.split(" ")[1]) + "||")*10) + "\n") * 10
         await message.channel.send(bubble)
             
 
