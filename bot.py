@@ -127,7 +127,7 @@ async def on_message(message):
     if command.startswith(prefix + 'bubblewrap '):
         bubble = "||" + str(command.split(" ")[1]) + "||"
         bubble = ((bubble*10) + "\n")*10
-        message.channel.send(bubble)
+        await message.channel.send(bubble)
             
 
 @bot.event
