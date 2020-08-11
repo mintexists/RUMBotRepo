@@ -124,7 +124,8 @@ async def on_message(message):
         else:
             await message.channel.send("Invalid Rule Number")
 
-    if command.startswith(prefix + 'bubblewrap '):
+    if command.startswith(prefix + 'bubblewrap ') or command.startswith(prefix + 'bw '):
+        # Sends a 10 by 10 grid of individual spoilered emotes
         bubble = ((("||" + str(command.split(" ")[1]) + "||")*10) + "\n") * 10
         await message.channel.send(bubble)
             
