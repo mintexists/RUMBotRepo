@@ -95,10 +95,10 @@ async def on_message(message):
         print("Server Called")
         embedVar=discord.Embed(title="Republic of United Members", description="Casual server focused around fairness and democracy. ")
         embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/740711351152017458/e20176f3cfe1fc2d0edc24005d749a8b_2.png")
-        embedVar.add_field(name="Creation Date:", value= message.guild.created_at, inline=True)
+        embedVar.add_field(name="Creation Date:", value= message.guild.created_at.strftime("%b") + " " + message.guild.created_at.strftime("%d") + ", " + message.guild.created_at.strftime("%Y"), inline=True)
+        embedVar.add_field(name="Server Age:", value= str((message.channel.guild.created_at.utcnow() - message.channel.guild.created_at).days) + " Days", inline=True)
         embedVar.add_field(name="Member Count:", value= message.guild.member_count, inline=True)
         embedVar.add_field(name="Current Consuls:", value="RaccWillAttacc#3661, FlobbsterBisque#5674", inline=True)
-        #embedVar.add_field(name="Server Age:", value= discord.Guild.created_at.utcnow() -discord.Guild.created_at, inline=True)
         await message.channel.send(embed=embedVar)
  
     if command.startswith(prefix + 'help'):
