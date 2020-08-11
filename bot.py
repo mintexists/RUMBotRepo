@@ -36,7 +36,10 @@ async def checkSuggestions():
                     print("❌ Denied: \n" + message.content)
                 embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
                 embedVar.add_field(name="Votes:", value = "✅ " + str(approvals.count) + " ❌ " + str(denials.count) , inline=False)
-                await bot.get_channel(739172158948900925).send(embed=embedVar)
+                files = []
+                for attachments in message.attachments:
+                    files.append(await attachments.to_file)
+                await bot.get_channel(739172158948900925).send(embed=embedVar, files=files)
                 await message.delete()
         await asyncio.sleep(5)
 
@@ -73,8 +76,11 @@ async def on_message(message):
     # General Commands
     if command.startswith(prefix + 'test'):
         print("Test Called")
-        embedVar=discord.Embed(title="\[ID\]", description= str(randNum), color=0x00ff62)
-        await message.channel.send(embed=embedVar)
+        embedVar=discord.Embed(title="[ID]", description= str(randNum), color=0x00ff62)
+        files = []
+        for each in message.attachments:
+            files.append(await each.to_file())
+        await message.channel.send(embed=embedVar, files=files)
     
     if command.startswith(prefix + 'info'):
         print("Info Called")
