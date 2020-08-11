@@ -124,6 +124,12 @@ async def on_message(message):
         else:
             await message.channel.send("Invalid Rule Number")
 
+    if command.startswith(prefix + 'bubblewrap '):
+        bubble = "||" + str(command.split(" ")[1]) + "||"
+        bubble = ((bubble*10) + "\n")*10
+        message.channel.send(bubble)
+            
+
 @bot.event
 async def on_reaction_add(reaction, user):
     # Remove reaction to make suggestion value accurate
