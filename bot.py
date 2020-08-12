@@ -146,7 +146,7 @@ async def on_message(message):
         await message.channel.send(sendything)
     
     if command.startswith(prefix + "status ") and message.author.id == 369988289354006528:
-        status = str(command.split("\"")[1])
+        status = str(command.split('"')[1])
         await message.channel.send("The status is now " + status)
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=status))
             
