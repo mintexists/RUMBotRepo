@@ -135,8 +135,8 @@ async def on_message(message):
     if command.startswith(prefix + 'bubblewrap ') or command.startswith(prefix + 'bw '):
         # Sends a 10 by 10 grid of individually spoilered emotes
         bubble = str("||" + str(command.split(" ")[1]) + "||")
-        dimensions = math.floor(math.sqrt(2000/len(bubble))
-        sendything = str(((bubble * dimensions) + "\n") * dimensions)
+        dimensions = math.floor(math.sqrt(2000/len(bubble)))
+        sendything = (bubble * dimensions) + "\n") * dimensions
         #((("||" + str(command.split(" ")[1]) + "||")*10) + "\n") * 10
         await message.channel.send(sendything)
             
