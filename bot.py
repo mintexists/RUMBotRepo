@@ -10,8 +10,7 @@ prefix = "r?"
 
 randNum = random.random()
 bot = discord.Client()
-bot.suggestQueue=collections.deque()
-
+bot.suggestQueue=[]
 # Activity
 async def updateSuggestions():
     channel=bot.get_channel(737807052625412208)
@@ -20,15 +19,19 @@ async def updateSuggestions():
             bot.suggestQueue.append(message)
 
 async def checkSuggestions():
+    #periodically checks least recent suggestion
     await bot.wait_until_ready()
     while True:
-        if bot.suggestQueue:
-            message=bot.suggestQueue[0]
-            if (message.created_at.utcnow()-message.created_at).seconds>(6)*3600 or (message.created_at.utcnow()-message.created_at).days>0:
-                message=bot.suggestQueue.popleft()
-                approvals = get(message.reactions, emoji="✅")
-                denials = get(message.reactions, emoji="❌")
-                if approvals.count>denials.count:
+        for message in bot.suggestQueue:
+            approvalsObject=get(message.reactions, emoji="✅")
+            denialsObject=get(message.reactions, emoji="❌")
+            approvals=approvalsObject.count-(bot.user in set(await approvalsObject.users().flatten())) #gets # of yes reactions that isn't the bot
+            denials=denialsObject.count-(bot.user in set(await denialsObject.users().flatten()))     #gets # of no reactions that isn't the bot
+            timeLimit=datetime.timedelta(seconds=6*3600*(1-(approvals+denials)/bot.memberCount))            #math to figure out the time limit of the suggestion - 0 people reacted yet=24 hrs, everyone reacted=0, half=12 hours
+            print(timeLimit)
+            if (message.created_at.utcnow()-message.created_at)>timeLimit:
+                bot.suggestQueue.remove(message)
+                if approvals>denials:
                     embedVar = discord.Embed(title="✅ Approved", description = message.content , color=0x00FF04)
                 else:
                     embedVar = discord.Embed(title="❌ Denied", description = message.content , color=0xFF0000)
@@ -42,6 +45,7 @@ async def on_ready():
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Republic of United Members"))
     await updateSuggestions()
     bot.loop.create_task(checkSuggestions())
+    bot.memberCount=len([m for m in bot.get_guild(736306540671271036).members if not m.bot])
     print("Bot is online. Instance ID is " + str(randNum))
     embedVar=discord.Embed(title=":green_circle: Bot is online", color=0x00ff62)
     embedVar.add_field(name="Instance ID:", value= + (randNum), inline=True)
@@ -138,7 +142,7 @@ async def on_member_join(member):
     # Ping welcomer and consulate weh na new member joins the server
     if member.bot == False:
         await bot.get_channel(736310120199225365).send(member.guild.get_role(736316470098657342).mention + " " + member.guild.get_role(739197317537726475).mention + " A new member has joined")
-
+        bot.memberCount+=1
 
 
 
@@ -147,5 +151,5 @@ async def on_member_join(member):
 # linux u can set it with export TOKEN=token
 # Macos is probs the same as linux
 
-token = str(os.getenv('TOKEN'))
+token = "NzM4OTIyODM0NDI4MTY2MjM4.XyS9hA.ERWU-WTKxiNEliLcywCgsiHaqBY"
 bot.run(token)
