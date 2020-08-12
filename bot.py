@@ -136,7 +136,11 @@ async def on_message(message):
         # Sends a 10 by 10 grid of individually spoilered emotes
         bubble = str("||" + str(command.split(" ")[1]) + "||")
         dimensions = math.floor(math.sqrt(2000/len(bubble)))
-        sendything = (bubble * dimensions) + "\n") * dimensions
+        if dimensions > 15:
+            dimensions = 15
+        sendything = ((bubble * (dimensions - 2)) + "\n") * (dimensions - 2)
+        print(sendything)
+        print(len(sendything))
         #((("||" + str(command.split(" ")[1]) + "||")*10) + "\n") * 10
         await message.channel.send(sendything)
             
