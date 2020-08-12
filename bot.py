@@ -39,7 +39,7 @@ async def checkSuggestions():
                 embedVar.add_field(name="Votes:", value = "✅ " + str(approvals.count) + " ❌ " + str(denials.count) , inline=False)
                 files = []
                 for attachments in message.attachments:
-                    files.append(await attachments.to_file)
+                    files.append(await attachments.to_file())
                 await bot.get_channel(739172158948900925).send(embed=embedVar, files=files)
                 await message.delete()
         await asyncio.sleep(5)
