@@ -5,6 +5,7 @@ import os
 import random
 import collections
 import datetime
+import math
 
 prefix = "r?"
 
@@ -132,9 +133,12 @@ async def on_message(message):
             await message.channel.send("Invalid Rule Number")
 
     if command.startswith(prefix + 'bubblewrap ') or command.startswith(prefix + 'bw '):
-        # Sends a 10 by 10 grid of individual spoilered emotes
-        bubble = ((("||" + str(command.split(" ")[1]) + "||")*10) + "\n") * 10
-        await message.channel.send(bubble)
+        # Sends a 10 by 10 grid of individually spoilered emotes
+        bubble = str("||" + str(command.split(" ")[1]) + "||")
+        dimensions = math.floor(math.sqrt(2000/len(bubble))
+        sendything = str(((bubble * dimensions) + "\n") * dimensions)
+        #((("||" + str(command.split(" ")[1]) + "||")*10) + "\n") * 10
+        await message.channel.send(sendything)
             
 
 @bot.event
