@@ -156,7 +156,7 @@ async def on_message(message):
             # If has 4 give 5 and warn
             if warnmember.guild.get_role(742954033115037807) in warnmember.roles:
                 await warnmember.add_roles(warnmember.guild.get_role(742954067642548285))
-                await message.channel.send(warnmember.mention + " now has 5 strikes, its time for a punishment")
+                await message.channel.send(warnmember.mention + " now has 5 strikes")
             # If has 3 give 4
             elif warnmember.guild.get_role(742953961014689842) in warnmember.roles:
                 await warnmember.add_roles(warnmember.guild.get_role(742954033115037807))
