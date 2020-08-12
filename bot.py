@@ -235,8 +235,9 @@ async def on_reaction_remove(reaction, user):
 async def on_member_join(member):
     # Ping welcomer and consulate when a new member joins the server
     if member.bot == False:
-        await bot.get_channel(736310120199225365).send(member.guild.get_role(736316470098657342).mention + " " + member.guild.get_role(739197317537726475).mention + " A new member has joined")
-    print("Member Joined")
+        await member.guild.get_channel(739647916905332846).send(member.mention + " has joined.\n" + member.guild.get_role(736316470098657342).mention)
+        await member.add_roles(member.guild.get_role(743206825176072345), member.guild.get_role(743206597387485324))
+    print(member.nick + " Joined")
 
 
 
