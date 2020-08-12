@@ -150,6 +150,32 @@ async def on_message(message):
         await message.channel.send("The status is now " + status)
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=status))
             
+    if command.startswith(prefix + "warn"):
+        warnmember = message.mentions[0]
+        if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528:
+            # If has 4 give 5 and warn
+            if warnmember.guild.get_role(742954033115037807) in warnmember.roles:
+                await warnmember.add_roles(warnmember.guild.get_role(742954067642548285))
+                await message.channel.send(warnmember.mention + " now has 5 strikes, its time for a punishment")
+            # If has 3 give 4
+            elif warnmember.guild.get_role(742953961014689842) in warnmember.roles:
+                await warnmember.add_roles(warnmember.guild.get_role(742954033115037807))
+                await message.channel.send(warnmember.mention + " now has 4 strikes")
+            # If has 2 give 3
+            elif warnmember.guild.get_role(742953920225214584) in warnmember.roles:
+                await warnmember.add_roles(warnmember.guild.get_role(742953961014689842))
+                await message.channel.send(warnmember.mention + " now has 3 strikes")
+            # If has 1 give 2
+            elif warnmember.guild.get_role(742953865439215656) in warnmember.roles:
+                await warnmember.add_roles(warnmember.guild.get_role(742953920225214584))
+                await message.channel.send(warnmember.mention + " now has 2 strikes")
+            # If none give one
+            else:
+                await warnmember.add_roles(warnmember.guild.get_role(742953865439215656))
+                await message.channel.send(warnmember.mention + " now has 1 strike")
+
+
+
 
 @bot.event
 async def on_reaction_add(reaction, user):
