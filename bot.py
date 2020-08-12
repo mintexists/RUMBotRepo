@@ -46,9 +46,11 @@ async def checkSuggestions():
 
 @bot.event
 async def on_ready():
+    # Set Status
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Republic of United Members"))
     await updateSuggestions()
     bot.loop.create_task(checkSuggestions())
+    # Send bot online notices
     print("Bot is online. Instance ID is " + str(randNum))
     embedVar=discord.Embed(title=":green_circle: Bot is online", color=0x00ff62)
     embedVar.add_field(name="Instance ID:", value= randNum, inline=True)
@@ -141,7 +143,6 @@ async def on_message(message):
         sendything = ((bubble * (dimensions - 2)) + "\n") * (dimensions - 2)
         print(sendything)
         print(len(sendything))
-        #((("||" + str(command.split(" ")[1]) + "||")*10) + "\n") * 10
         await message.channel.send(sendything)
             
 
