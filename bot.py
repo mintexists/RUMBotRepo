@@ -202,6 +202,13 @@ async def on_message(message):
             else:
                 await message.channel.send(warnmember.mention + " had no strikes")
 
+    if command.startswith(prefix + "addrole"):
+        roles = message.role_mentions
+        if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528 or message.author.id == 317456004843438082:
+            for role in roles:
+                for member in message.guild.members:
+                    await member.add_roles(role)
+
 
 
 
