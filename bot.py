@@ -246,20 +246,28 @@ async def on_message(message):
             else:
                 await opponentMsg.channel.send('Done')
                 opponentEmote = str(reaction.emoji)
-            if challengerEmote == opponentEmote:
-                await message.channel.send("Its a tie")
-            elif challengerEmote == "✊" and opponentEmote == "🖐️":
-                await message.channel.send(opponent.mention + " won")
-            elif challengerEmote == "✊" and opponentEmote == "✌️":
-                await message.channel.send(challenger.mention + " won")
-            elif challengerEmote == "🖐️" and opponentEmote == "✌️":
-                await message.channel.send(opponent.mention + " won")
-            elif challengerEmote == "🖐️" and opponentEmote == "✊":
-                await message.channel.send(challenger.mention + " won")
-            elif challengerEmote == "✌️" and opponentEmote == "✊":
-                await message.channel.send(opponent.mention + " won")
-            elif challengerEmote == "✌️" and opponentEmote == "🖐️":
-                await message.channel.send(challenger.mention + " won")
+            if challengerEmote == "✊":
+                if opponentEmote == "✊":
+                    await message.channel.send("Its a tie")
+                if opponentEmote == "🖐️":
+                    await message.channel.send(opponent.mention + " won")
+                if opponentEmote == "✌️":
+                    await message.channel.send(challenger.mention + " won")
+            elif challengerEmote == "🖐️":
+                if opponentEmote == "✊":
+                    await message.channel.send(challenger.mention + " won")
+                if opponentEmote == "🖐️":
+                    await message.channel.send("Its a tie")
+                if opponentEmote == "✌️":
+                    await message.channel.send(opponent.mention + " won")
+            elif challengerEmote == "✌️":
+                if opponentEmote == "✊":
+                    await message.channel.send(opponent.mention + " won")
+                if opponentEmote == "🖐️":
+                    await message.channel.send(challenger.mention + " won")
+                if opponentEmote == "✌️":
+                    await message.channel.send("Its a tie")
+
             
 
 
