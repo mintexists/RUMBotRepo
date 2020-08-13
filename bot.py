@@ -139,8 +139,6 @@ async def on_message(message):
         if dimensions > 15:
             dimensions = 15
         sendything = ((bubble * (dimensions - 2)) + "\n") * (dimensions - 2)
-        print(sendything)
-        print(len(sendything))
         await message.channel.send(sendything)
     
     if command.startswith(prefix + "status ") and message.author.id == 369988289354006528:
