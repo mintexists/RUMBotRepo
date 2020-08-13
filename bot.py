@@ -134,7 +134,7 @@ async def on_message(message):
 
     if command.startswith(prefix + 'bubblewrap ') or command.startswith(prefix + 'bw '):
         # Sends a 10 by 10 grid of individually spoilered emotes
-        bubble = str("||" + str(command.split(" ")[1]) + "||")
+        bubble = str("||" + str(command.split(" ")[1]).replace("\n", "") + "||")
         dimensions = math.floor(math.sqrt(2000/len(bubble)))
         if dimensions > 15:
             dimensions = 15
@@ -203,7 +203,8 @@ async def on_message(message):
         if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528 or message.author.id == 317456004843438082:
             for role in roles:
                 for member in message.guild.members:
-                    await member.add_roles(role)
+                    if not member.bot:
+                        await member.add_roles(role)
 
     if command.startswith(prefix + "rockpaperscissors") or command.startswith(prefix + "rps"):
         challenger = message.author
