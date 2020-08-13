@@ -108,11 +108,9 @@ async def on_message(message):
         print("Help Called")
         embedVar=discord.Embed(title="RUM Bot Command List", description="List containing all bot commands.", color=0xfb00ff)
         embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/740711482391658567/botpic_2.png")
-        embedVar.add_field(name="r?help", value="Displays this list.", inline=True)
-        embedVar.add_field(name="r?info", value="Displays bot info.", inline=True)
-        embedVar.add_field(name="r?coinflip or cf", value="Flips a coin.", inline=True)
-        embedVar.add_field(name="r?bubblewrap or wb", value="Makes a bubblewrap with text or emote", inline=True)
-        embedVar.add_field(name="r?test", value="Sends the bot instance IDs", inline=True)
+        num_lines = sum(1 for line in open('help.txt'))
+        for helpNum in range((num_lines//2)):
+            embedVar.add_field(name=await getLine('help.txt',2*helpNum+1), value=await getLine('help.txt',2*helpNum+2), inline=True)
         embedVar.set_footer(text="Any questions? Ask one of the contributors! Any Suggestions? Put them in #suggestions!")
         await message.channel.send(embed=embedVar)
 

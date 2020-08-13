@@ -1,0 +1,10 @@
+r?help
+Displays this list.
+r?info
+Displays bot info.
+r?coinflip or cf
+Flips a coin.
+r?bubblewrap or bw
+Makes a bubblewrap with text or emote
+r?test
+Sends the bot instance IDs
