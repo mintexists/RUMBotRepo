@@ -244,6 +244,7 @@ async def on_member_join(member):
 
 # Reads the enviorment variable token for the token value
 # To set it on windows do set TOKEN=token
+# U can also make that permanent by using Windows search and searching for environment variables and adding it as one
 # linux u can set it with export TOKEN=token
 # Macos is probs the same as linux
 
