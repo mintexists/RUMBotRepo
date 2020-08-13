@@ -126,8 +126,8 @@ async def on_message(message):
         await message.channel.send("> The coin landed on " + flipside)
 
     if command.startswith(prefix + 'rule '):
-        ruleNum = int(command.split(" ")[1])
-        print("Rule " + ruleNum + " Called")
+        ruleNum = int(command.split("rule ")[1])
+        print("Rule " + str(ruleNum) + " Called")
         if 1<=ruleNum<=9:
             embedVar = discord.Embed(title=await getLine("rules.txt",2*ruleNum-1), description=await getLine("rules.txt",2*ruleNum), color=0xEC00FF)
             await message.channel.send(embed=embedVar)
