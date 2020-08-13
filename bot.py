@@ -84,6 +84,8 @@ async def on_message(message):
         for each in message.attachments:
             files.append(await each.to_file())
         await message.channel.send(embed=embedVar, files=files)
+    if command.startswith(prefix + 'eval ') and message.author.id == 369988289354006528:
+        eval(command.split('eval ')[1])
     
     if command.startswith(prefix + 'info'):
         print("Info Called")
