@@ -245,6 +245,13 @@ async def on_member_join(member):
         bot.memberCount+=1
     print(member.nick + " Joined")
 
+@bot.event
+async def on_member_leave(member):
+    # Ping welcomer and consulate when a new member joins the server
+    if member.bot == False:
+        await member.guild.get_channel(739647916905332846).send(member.mention + " has left.\n" + member.guild.get_role(736316470098657342).mention)
+        bot.memberCount-=1
+    print(member.nick + " Left")
 
 
 
