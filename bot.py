@@ -23,32 +23,37 @@ async def updateSuggestions():
 async def checkSuggestions():
     await bot.wait_until_ready()
     while True:
-        if bot.suggestQueue:
-            message=bot.suggestQueue[0]
-            if (message.created_at.utcnow()-message.created_at).seconds>(6)*3600 or (message.created_at.utcnow()-message.created_at).days>0:
-                message=bot.suggestQueue.popleft()
-                approvals = get(message.reactions, emoji="✅")
-                denials = get(message.reactions, emoji="❌")
-                if approvals.count>denials.count:
+        for message in bot.suggestQueue:
+            approvalsObject=get(message.reactions, emoji="✅")
+            denialsObject=get(message.reactions, emoji="❌")
+            approvals=approvalsObject.count-(bot.user in set(await approvalsObject.users().flatten())) #gets # of yes reactions that isn't the bot
+            denials=denialsObject.count-(bot.user in set(await denialsObject.users().flatten()))     #gets # of no reactions that isn't the bot
+            timeLimit=datetime.timedelta(seconds=6*3600*(1-(approvals+denials)/bot.memberCount))            #math to figure out the time limit of the suggestion - 0 people reacted yet=6 hrs
+            if (message.created_at.utcnow()-message.created_at)>timeLimit:
+                bot.suggestQueue.remove(message)
+                if approvals>denials:
                     embedVar = discord.Embed(title="✅ Approved", description = message.content , color=0x00FF04)
                     print("✅ Approved: \n" + message.content)
                 else:
                     embedVar = discord.Embed(title="❌ Denied", description = message.content , color=0xFF0000)
                     print("❌ Denied: \n" + message.content)
                 embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
-                embedVar.add_field(name="Votes:", value = "✅ " + str(approvals.count) + " ❌ " + str(denials.count) , inline=False)
+                
+                embedVar.add_field(name="Votes:", value = "✅ " + str(approvals) + " ❌ " + str(denials) , inline=False)
                 files = []
                 for attachments in message.attachments:
                     files.append(await attachments.to_file())
-                await bot.get_channel(739172158948900925).send(embed=embedVar, files=files)
+                await bot.get_channel(739172158948900925).send(embed=embedVar,files=files)
                 await message.delete()
         await asyncio.sleep(5)
+
 
 @bot.event
 async def on_ready():
     # Set Status
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Republic of United Members"))
     await updateSuggestions()
+    bot.memberCount=len([m for m in bot.get_guild(736306540671271036).members if not m.bot])
     bot.loop.create_task(checkSuggestions())
     # Send bot online notices
     print("Bot is online. Instance ID is " + str(randNum))
@@ -237,6 +242,7 @@ async def on_member_join(member):
     if member.bot == False:
         await member.guild.get_channel(739647916905332846).send(member.mention + " has joined.\n" + member.guild.get_role(736316470098657342).mention)
         await member.add_roles(member.guild.get_role(743206825176072345), member.guild.get_role(743206597387485324))
+        bot.memberCount+=1
     print(member.nick + " Joined")
 
 
