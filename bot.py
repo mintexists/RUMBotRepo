@@ -207,7 +207,60 @@ async def on_message(message):
                 for member in message.guild.members:
                     await member.add_roles(role)
 
-
+    if command.startswith(prefix + "rockpaperscissors") or command.startswith(prefix + "rps"):
+        challenger = message.author
+        opponent = message.mentions[0]
+        msg = await message.channel.send("Do you accept the challenge?")
+        await msg.add_reaction("✅")
+        def acceptsChallenge(reaction, user):
+            return user == opponent and str(reaction.emoji) == '✅' and reaction.message.id == msg.id
+        try:
+            reaction, user = await bot.wait_for('reaction_add', timeout=300.0, check=acceptsChallenge)
+        except asyncio.TimeoutError:
+            await message.channel.send('Not accepted')
+        else:
+            await message.channel.send('Accepted')
+            challengerMsg = await challenger.send("Choose Rock, Paper, or Scissors")
+            await challengerMsg.add_reaction("✊")
+            await challengerMsg.add_reaction("🖐️")
+            await challengerMsg.add_reaction("✌️")
+            def challengerCheck(reaction, user):
+                return reaction.message.id == challengerMsg.id and user == challenger and (str(reaction.emoji) == '✊' or str(reaction.emoji) == '🖐️' or str(reaction.emoji) == '✌️')
+            try:
+                reaction, user = await bot.wait_for('reaction_add', timeout=60.0, check=challengerCheck)
+            except asyncio.TimeoutError:
+                await challengerMsg.channel.send('Timed out')
+            else:
+                await challengerMsg.channel.send('Done')
+                challengerEmote = str(reaction.emoji)
+            opponentMsg = await opponent.send("Choose Rock, Paper, or Scissors")
+            await opponentMsg.add_reaction("✊")
+            await opponentMsg.add_reaction("🖐️")
+            await opponentMsg.add_reaction("✌️")
+            def opponentCheck(reaction, user):
+                return reaction.message.id == opponentMsg.id and user == opponent and (str(reaction.emoji) == '✊' or str(reaction.emoji) == '🖐️' or str(reaction.emoji) == '✌️')
+            try:
+                reaction, user = await bot.wait_for('reaction_add', timeout=60.0, check=opponentCheck)
+            except asyncio.TimeoutError:
+                await opponentMsg.channel.send('Timed out')
+            else:
+                await opponentMsg.channel.send('Done')
+                opponentEmote = str(reaction.emoji)
+            if challengerEmote == opponentEmote:
+                await message.channel.send("Its a tie")
+            elif challengerEmote == "✊" and opponentEmote == "🖐️":
+                await message.channel.send(opponent.mention + " won")
+            elif challengerEmote == "✊" and opponentEmote == "✌️":
+                await message.channel.send(challenger.mention + " won")
+            elif challengerEmote == "🖐️" and opponentEmote == "✌️":
+                await message.channel.send(opponent.mention + " won")
+            elif challengerEmote == "🖐️" and opponentEmote == "✊":
+                await message.channel.send(challenger.mention + " won")
+            elif challengerEmote == "✌️" and opponentEmote == "✊":
+                await message.channel.send(opponent.mention + " won")
+            elif challengerEmote == "✌️" and opponentEmote == "🖐️":
+                await message.channel.send(challenger.mention + " won")
+            
 
 
 @bot.event
