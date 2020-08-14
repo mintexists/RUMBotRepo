@@ -6,6 +6,8 @@ import random
 import collections
 import datetime
 import math
+import traceback
+
 
 prefix = "r?"
 
@@ -84,8 +86,19 @@ async def on_message(message):
         for each in message.attachments:
             files.append(await each.to_file())
         await message.channel.send(embed=embedVar, files=files)
+    
     if command.startswith(prefix + 'eval ') and message.author.id == 369988289354006528:
-        eval(command.split('eval ')[1])
+        try:
+            msg = await eval(command.split('eval ')[1])
+            await message.channel.send("```" + str(msg) + "```")
+        except:
+            try:
+                msg = eval(command.split('eval ')[1])
+                await message.channel.send("```" + str(msg) + "```")
+            except:
+                e = traceback.format_exc()
+                await message.channel.send("```" + str(e) + "```")
+        
     
     if command.startswith(prefix + 'info'):
         print("Info Called")
