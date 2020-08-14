@@ -105,7 +105,7 @@ async def on_message(message):
         embedVar.add_field(name="Contributors -", value="evalyn#8883, pupo#0001, MrMeme#5096", inline=True)
         embedVar.set_footer(text="Any questions? DM one of the contributors!")
         await message.channel.send(embed=embedVar)
-        
+
     if command.startswith(prefix + 'server'):
         print("Server Called")
         embedVar=discord.Embed(title="Republic of United Members", description="Casual server focused around fairness and democracy. ")
@@ -115,7 +115,7 @@ async def on_message(message):
         embedVar.add_field(name="Member Count:", value= message.guild.member_count, inline=True)
         embedVar.add_field(name="Current Consuls:", value="RaccWillAttacc#3661, FlobbsterBisque#5674", inline=True)
         await message.channel.send(embed=embedVar)
- 
+
     if command.startswith(prefix + 'help'):
         print("Help Called")
         embedVar=discord.Embed(title="RUM Bot Command List", description="List containing all bot commands.", color=0xfb00ff)
@@ -152,12 +152,12 @@ async def on_message(message):
             dimensions = 15
         sendything = ((bubble * (dimensions - 2)) + "\n") * (dimensions - 2)
         await message.channel.send(sendything)
-    
+
     if command.startswith(prefix + "status ") and message.author.id == 369988289354006528:
         status = str(message.content.split("status ")[1])
         await message.channel.send("The status is now " + status)
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=status))
-            
+
     if command.startswith(prefix + "warn") or command.startswith(prefix + "strike"):
         warnmember = message.mentions[0]
         if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528 or message.author.id == 317456004843438082:
@@ -182,7 +182,7 @@ async def on_message(message):
                 await warnmember.add_roles(warnmember.guild.get_role(743205924059086918))
                 await warnmember.add_roles(warnmember.guild.get_role(742953865439215656))
                 await message.channel.send(warnmember.mention + " now has 1 strike")
-    
+
     if command.startswith(prefix + "removewarn") or command.startswith(prefix + "removestrike"):
         warnmember = message.mentions[0]
         if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528 or message.author.id == 317456004843438082:
