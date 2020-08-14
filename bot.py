@@ -58,8 +58,6 @@ async def on_ready():
     embedVar.add_field(name="Instance ID:", value= randNum, inline=True)
     await bot.get_channel(740049560591925362).send(embed=embedVar)
 
-
-        
 #Bot commands
 async def getLine(fileName,lineNum):
     fh=open(fileName)
@@ -86,7 +84,7 @@ async def on_message(message):
         for each in message.attachments:
             files.append(await each.to_file())
         await message.channel.send(embed=embedVar, files=files)
-    
+
     if command.startswith(prefix + 'eval ') and message.author.id == 369988289354006528:
         try:
             msg = await eval(command.split('eval ')[1])
@@ -98,8 +96,7 @@ async def on_message(message):
             except:
                 e = traceback.format_exc()
                 await message.channel.send("```" + str(e) + "```")
-        
-    
+
     if command.startswith(prefix + 'info'):
         print("Info Called")
         embedVar =discord.Embed(title="RUM Bot", description="Custom bot developed for the Republic of United Members discord server.", color=0xd400ff)
@@ -282,9 +279,6 @@ async def on_message(message):
                 if opponentEmote == "✌️":
                     await message.channel.send("Its a tie")
 
-            
-
-
 @bot.event
 async def on_reaction_add(reaction, user):
     # Remove reaction to make suggestion value accurate
@@ -302,7 +296,6 @@ async def on_reaction_remove(reaction, user):
             await reaction.message.add_reaction("✅")
         elif get(reaction.message.reactions, emoji="❌") is None:
             await reaction.message.add_reaction("❌")
-
 
 @bot.event
 async def on_member_join(member):
