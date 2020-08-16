@@ -6,6 +6,8 @@ import random
 import collections
 import datetime
 import math
+import traceback
+
 
 prefix = "r?"
 
@@ -38,8 +40,8 @@ async def checkSuggestions():
                     embedVar = discord.Embed(title="❌ Denied", description = message.content , color=0xFF0000)
                     print("❌ Denied: \n" + message.content)
                 embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
-                
-                embedVar.add_field(name="Votes:", value = "✅ " + str(approvals) + " ❌ " + str(denials) , inline=False)
+                embedVar.add_field(name="Votes:", value = "✅ " + str(approvals.count) + " ❌ " + str(denials.count) , inline=False)
+                embedVar.set_footer(text="Suggested at " + str(message.created_at.strftime("%b %d %Y %H:%M:%S")))
                 files = []
                 for attachments in message.attachments:
                     files.append(await attachments.to_file())
@@ -61,8 +63,6 @@ async def on_ready():
     embedVar.add_field(name="Instance ID:", value= randNum, inline=True)
     await bot.get_channel(740049560591925362).send(embed=embedVar)
 
-
-        
 #Bot commands
 async def getLine(fileName,lineNum):
     fh=open(fileName)
@@ -89,7 +89,19 @@ async def on_message(message):
         for each in message.attachments:
             files.append(await each.to_file())
         await message.channel.send(embed=embedVar, files=files)
-    
+
+    if command.startswith(prefix + 'eval ') and message.author.id == 369988289354006528:
+        try:
+            msg = await eval(command.split('eval ')[1])
+            await message.channel.send("```" + str(msg) + "```")
+        except:
+            try:
+                msg = eval(command.split('eval ')[1])
+                await message.channel.send("```" + str(msg) + "```")
+            except:
+                e = traceback.format_exc()
+                await message.channel.send("```" + str(e) + "```")
+
     if command.startswith(prefix + 'info'):
         print("Info Called")
         embedVar =discord.Embed(title="RUM Bot", description="Custom bot developed for the Republic of United Members discord server.", color=0xd400ff)
@@ -98,7 +110,7 @@ async def on_message(message):
         embedVar.add_field(name="Contributors -", value="evalyn#8883, pupo#0001, MrMeme#5096", inline=True)
         embedVar.set_footer(text="Any questions? DM one of the contributors!")
         await message.channel.send(embed=embedVar)
-        
+
     if command.startswith(prefix + 'server'):
         print("Server Called")
         embedVar=discord.Embed(title="Republic of United Members", description="Casual server focused around fairness and democracy. ")
@@ -108,16 +120,14 @@ async def on_message(message):
         embedVar.add_field(name="Member Count:", value= message.guild.member_count, inline=True)
         embedVar.add_field(name="Current Consuls:", value="RaccWillAttacc#3661, FlobbsterBisque#5674", inline=True)
         await message.channel.send(embed=embedVar)
- 
+
     if command.startswith(prefix + 'help'):
         print("Help Called")
         embedVar=discord.Embed(title="RUM Bot Command List", description="List containing all bot commands.", color=0xfb00ff)
         embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/740711482391658567/botpic_2.png")
-        embedVar.add_field(name="r?help", value="Displays this list.", inline=True)
-        embedVar.add_field(name="r?info", value="Displays bot info.", inline=True)
-        embedVar.add_field(name="r?coinflip or cf", value="Flips a coin.", inline=True)
-        embedVar.add_field(name="r?bubblewrap or wb", value="Makes a bubblewrap with text or emote", inline=True)
-        embedVar.add_field(name="r?test", value="Sends the bot instance IDs", inline=True)
+        num_lines = sum(1 for line in open('help.txt'))
+        for helpNum in range((num_lines//2)):
+            embedVar.add_field(name=await getLine('help.txt',2*helpNum+1), value=await getLine('help.txt',2*helpNum+2), inline=True)
         embedVar.set_footer(text="Any questions? Ask one of the contributors! Any Suggestions? Put them in #suggestions!")
         await message.channel.send(embed=embedVar)
 
@@ -131,8 +141,8 @@ async def on_message(message):
         await message.channel.send("> The coin landed on " + flipside)
 
     if command.startswith(prefix + 'rule '):
-        ruleNum = int(command.split(" ")[1])
-        print("Rule " + ruleNum + " Called")
+        ruleNum = int(command.split("rule ")[1])
+        print("Rule " + str(ruleNum) + " Called")
         if 1<=ruleNum<=9:
             embedVar = discord.Embed(title=await getLine("rules.txt",2*ruleNum-1), description=await getLine("rules.txt",2*ruleNum), color=0xEC00FF)
             await message.channel.send(embed=embedVar)
@@ -141,20 +151,18 @@ async def on_message(message):
 
     if command.startswith(prefix + 'bubblewrap ') or command.startswith(prefix + 'bw '):
         # Sends a 10 by 10 grid of individually spoilered emotes
-        bubble = str("||" + str(command.split(" ")[1]) + "||")
+        bubble = str("||" + str(command.split(" ")[1]).replace("\n", "") + "||")
         dimensions = math.floor(math.sqrt(2000/len(bubble)))
         if dimensions > 15:
             dimensions = 15
         sendything = ((bubble * (dimensions - 2)) + "\n") * (dimensions - 2)
-        print(sendything)
-        print(len(sendything))
         await message.channel.send(sendything)
-    
+
     if command.startswith(prefix + "status ") and message.author.id == 369988289354006528:
         status = str(message.content.split("status ")[1])
         await message.channel.send("The status is now " + status)
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=status))
-            
+
     if command.startswith(prefix + "warn") or command.startswith(prefix + "strike"):
         warnmember = message.mentions[0]
         if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528 or message.author.id == 317456004843438082:
@@ -179,7 +187,7 @@ async def on_message(message):
                 await warnmember.add_roles(warnmember.guild.get_role(743205924059086918))
                 await warnmember.add_roles(warnmember.guild.get_role(742953865439215656))
                 await message.channel.send(warnmember.mention + " now has 1 strike")
-    
+
     if command.startswith(prefix + "removewarn") or command.startswith(prefix + "removestrike"):
         warnmember = message.mentions[0]
         if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528 or message.author.id == 317456004843438082:
@@ -212,10 +220,69 @@ async def on_message(message):
         if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528 or message.author.id == 317456004843438082:
             for role in roles:
                 for member in message.guild.members:
-                    await member.add_roles(role)
+                    if not member.bot:
+                        await member.add_roles(role)
 
-
-
+    if command.startswith(prefix + "rockpaperscissors") or command.startswith(prefix + "rps"):
+        challenger = message.author
+        opponent = message.mentions[0]
+        msg = await message.channel.send("Do you accept the challenge?")
+        await msg.add_reaction("✅")
+        def acceptsChallenge(reaction, user):
+            return user == opponent and str(reaction.emoji) == '✅' and reaction.message.id == msg.id
+        try:
+            reaction, user = await bot.wait_for('reaction_add', timeout=300.0, check=acceptsChallenge)
+        except asyncio.TimeoutError:
+            await message.channel.send('Not accepted')
+        else:
+            await message.channel.send('Accepted')
+            challengerMsg = await challenger.send("Choose Rock, Paper, or Scissors")
+            await challengerMsg.add_reaction("✊")
+            await challengerMsg.add_reaction("🖐️")
+            await challengerMsg.add_reaction("✌️")
+            def challengerCheck(reaction, user):
+                return reaction.message.id == challengerMsg.id and user == challenger and (str(reaction.emoji) == '✊' or str(reaction.emoji) == '🖐️' or str(reaction.emoji) == '✌️')
+            try:
+                reaction, user = await bot.wait_for('reaction_add', timeout=60.0, check=challengerCheck)
+            except asyncio.TimeoutError:
+                await challengerMsg.channel.send('Timed out')
+            else:
+                await challengerMsg.channel.send('Done')
+                challengerEmote = str(reaction.emoji)
+            opponentMsg = await opponent.send("Choose Rock, Paper, or Scissors")
+            await opponentMsg.add_reaction("✊")
+            await opponentMsg.add_reaction("🖐️")
+            await opponentMsg.add_reaction("✌️")
+            def opponentCheck(reaction, user):
+                return reaction.message.id == opponentMsg.id and user == opponent and (str(reaction.emoji) == '✊' or str(reaction.emoji) == '🖐️' or str(reaction.emoji) == '✌️')
+            try:
+                reaction, user = await bot.wait_for('reaction_add', timeout=60.0, check=opponentCheck)
+            except asyncio.TimeoutError:
+                await opponentMsg.channel.send('Timed out')
+            else:
+                await opponentMsg.channel.send('Done')
+                opponentEmote = str(reaction.emoji)
+            if challengerEmote == "✊":
+                if opponentEmote == "✊":
+                    await message.channel.send("Its a tie")
+                if opponentEmote == "🖐️":
+                    await message.channel.send(opponent.mention + " won")
+                if opponentEmote == "✌️":
+                    await message.channel.send(challenger.mention + " won")
+            elif challengerEmote == "🖐️":
+                if opponentEmote == "✊":
+                    await message.channel.send(challenger.mention + " won")
+                if opponentEmote == "🖐️":
+                    await message.channel.send("Its a tie")
+                if opponentEmote == "✌️":
+                    await message.channel.send(opponent.mention + " won")
+            elif challengerEmote == "✌️":
+                if opponentEmote == "✊":
+                    await message.channel.send(opponent.mention + " won")
+                if opponentEmote == "🖐️":
+                    await message.channel.send(challenger.mention + " won")
+                if opponentEmote == "✌️":
+                    await message.channel.send("Its a tie")
 
 @bot.event
 async def on_reaction_add(reaction, user):
@@ -234,7 +301,6 @@ async def on_reaction_remove(reaction, user):
             await reaction.message.add_reaction("✅")
         elif get(reaction.message.reactions, emoji="❌") is None:
             await reaction.message.add_reaction("❌")
-
 
 @bot.event
 async def on_member_join(member):
