@@ -89,7 +89,8 @@ async def on_message(message):
         for each in message.attachments:
             files.append(await each.to_file())
         await message.channel.send(embed=embedVar, files=files)
-
+    
+    # Eval command 
     if command.startswith(prefix + 'eval ') and message.author.id == 369988289354006528:
         try:
             msg = await eval(command.split('eval ')[1])
