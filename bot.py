@@ -21,7 +21,7 @@ async def updateSuggestions():
     async for message in channel.history(oldest_first=True):
         if get(message.reactions, emoji="✅") and get(message.reactions, emoji="❌"):
             bot.suggestQueue.append(message)
-
+ 
 async def checkSuggestions():
     await bot.wait_until_ready()
     while True:
