@@ -58,7 +58,6 @@ async def on_ready():
     embedVar.add_field(name="Instance ID:", value= randNum, inline=True)
     await bot.get_channel(740049560591925362).send(embed=embedVar)
 
-#Bot commands
 async def getLine(fileName,lineNum):
     fh=open(fileName)
     for i, row in enumerate(fh): 
@@ -87,7 +86,7 @@ async def on_message(message):
 
     if command.startswith(prefix + 'eval ') and message.author.id == 369988289354006528:
         try:
-            msg = await eval(command.split('eval ')[1])
+            msg = await eval(command.split(' ', 1)[1])
             await message.channel.send("```" + str(msg) + "```")
         except:
             try:
@@ -136,7 +135,7 @@ async def on_message(message):
         await message.channel.send("> The coin landed on " + flipside)
 
     if command.startswith(prefix + 'rule '):
-        ruleNum = int(command.split("rule ")[1])
+        ruleNum = int(command.split(" ", 1)[1])
         print("Rule " + str(ruleNum) + " Called")
         if 1<=ruleNum<=9:
             embedVar = discord.Embed(title=await getLine("rules.txt",2*ruleNum-1), description=await getLine("rules.txt",2*ruleNum), color=0xEC00FF)
@@ -146,7 +145,7 @@ async def on_message(message):
 
     if command.startswith(prefix + 'bubblewrap ') or command.startswith(prefix + 'bw '):
         # Sends a 10 by 10 grid of individually spoilered emotes
-        bubble = str("||" + str(command.split(" ")[1]).replace("\n", "") + "||")
+        bubble = str("||" + str(command.split(" ", 1)[1]).replace("\n", "") + "||")
         dimensions = math.floor(math.sqrt(2000/len(bubble)))
         if dimensions > 15:
             dimensions = 15
@@ -154,7 +153,7 @@ async def on_message(message):
         await message.channel.send(sendything)
 
     if command.startswith(prefix + "status ") and message.author.id == 369988289354006528:
-        status = str(message.content.split("status ")[1])
+        status = str(message.content.split(" ", 1)[1])
         await message.channel.send("The status is now " + status)
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=status))
 
