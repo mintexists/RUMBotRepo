@@ -151,7 +151,7 @@ async def on_message(message):
 
     if command.startswith(prefix + 'bubblewrap ') or command.startswith(prefix + 'bw '):
         # Sends a 10 by 10 grid of individually spoilered emotes
-        bubble = str("||" + str(command.split("bubblewrap ")[1]).replace("\n", "") + "||")
+        bubble = str("||" + str(command.split(" ", 1)[1]).replace("\n", "") + "||")
         dimensions = math.floor(math.sqrt(2000/len(bubble)))
         if dimensions > 15:
             dimensions = 15
