@@ -40,7 +40,7 @@ async def checkSuggestions():
                     embedVar = discord.Embed(title="❌ Denied", description = message.content , color=0xFF0000)
                     print("❌ Denied: \n" + message.content)
                 embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
-                embedVar.add_field(name="Votes:", value = "✅ " + str(approvals.count) + " ❌ " + str(denials.count) , inline=False)
+                embedVar.add_field(name="Votes:", value = "✅ " + str(approvals) + " ❌ " + str(denials) , inline=False)
                 embedVar.set_footer(text="Suggested at " + str(message.created_at.strftime("%b %d %Y %H:%M:%S")))
                 files = []
                 for attachments in message.attachments:
