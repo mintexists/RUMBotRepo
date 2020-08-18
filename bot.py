@@ -93,14 +93,14 @@ async def on_message(message):
     if command.startswith(prefix + 'eval ') and message.author.id == 369988289354006528:
         try:
             msg = await eval(command.split(' ', 1)[1])
-            await message.channel.send("```" + str(msg) + "```")
+            await message.channel.send("```{}```".format(str(msg)))
         except:
             try:
                 msg = eval(command.split('eval ')[1])
-                await message.channel.send("```" + str(msg) + "```")
+                await message.channel.send("```{}```".format(str(msg)))
             except:
                 e = traceback.format_exc()
-                await message.channel.send("```" + str(e) + "```")
+                await message.channel.send("```{}```".format(str(e)))
 
     if command.startswith(prefix + 'info'):
         print("Info Called")
@@ -137,12 +137,12 @@ async def on_message(message):
             flipside = "Heads"
         else:
             flipside = "Tails"
-        print("Coin Flipped and Landed on " + flipside)
-        await message.channel.send("> The coin landed on " + flipside)
+        print("Coin Flipped and Landed on {}".format(flipside))
+        await message.channel.send("> The coin flipped and landed on {}".format(flipside))
 
     if command.startswith(prefix + 'rule '):
         ruleNum = int(command.split(" ", 1)[1])
-        print("Rule " + str(ruleNum) + " Called")
+        print("Rule {} Called".format(str(ruleNum)))
         if 1<=ruleNum<=9:
             embedVar = discord.Embed(title=await getLine("rules.txt",2*ruleNum-1), description=await getLine("rules.txt",2*ruleNum), color=0xEC00FF)
             await message.channel.send(embed=embedVar)
