@@ -151,7 +151,7 @@ async def on_message(message):
 
     if (command.startswith(prefix + 'bubblewrap ') or command.startswith(prefix + 'bw ')):
         if not command.find("@") == -1:
-            message.channel.send("You cant ping people with this")
+            await message.channel.send("You cant ping people with this")
         else:
             # Sends the biggest grid smaller then 15 of individually spoilered emotes
             bubble = str("||" + str(command.split(" ", 1)[1]).replace("\n", "") + "||")
