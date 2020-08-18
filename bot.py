@@ -149,14 +149,17 @@ async def on_message(message):
         else:
             await message.channel.send("Invalid Rule Number")
 
-    if (command.startswith(prefix + 'bubblewrap ') or command.startswith(prefix + 'bw ')) and command.find("@") == -1:
-        # Sends a 10 by 10 grid of individually spoilered emotes
-        bubble = str("||" + str(command.split(" ", 1)[1]).replace("\n", "") + "||")
-        dimensions = math.floor(math.sqrt(2000/len(bubble)))
-        if dimensions > 15:
-            dimensions = 15
-        sendything = ((bubble * (dimensions - 2)) + "\n") * (dimensions - 2)
-        await message.channel.send(sendything)
+    if (command.startswith(prefix + 'bubblewrap ') or command.startswith(prefix + 'bw ')):
+        if command.find("@") == -1:
+            message.channel.send("You cant ping people with this")
+        else:
+            # Sends the biggest grid smaller then 15 of individually spoilered emotes
+            bubble = str("||" + str(command.split(" ", 1)[1]).replace("\n", "") + "||")
+            dimensions = math.floor(math.sqrt(2000/len(bubble)))
+            if dimensions > 15:
+                dimensions = 15
+            sendything = ((bubble * (dimensions - 2)) + "\n") * (dimensions - 2)
+            await message.channel.send(sendything)
 
     if command.startswith(prefix + "status ") and message.author.id == 369988289354006528:
         status = str(message.content.split(" ", 1)[1])
