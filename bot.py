@@ -150,7 +150,7 @@ async def on_message(message):
             await message.channel.send("Invalid Rule Number")
 
     if (command.startswith(prefix + 'bubblewrap ') or command.startswith(prefix + 'bw ')):
-        if command.find("@") == -1:
+        if not command.find("@") == -1:
             message.channel.send("You cant ping people with this")
         else:
             # Sends the biggest grid smaller then 15 of individually spoilered emotes
