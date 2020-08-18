@@ -149,7 +149,7 @@ async def on_message(message):
         else:
             await message.channel.send("Invalid Rule Number")
 
-    if (command.startswith(prefix + 'bubblewrap ') or command.startswith(prefix + 'bw ')) and not message.mention_everyone:
+    if (command.startswith(prefix + 'bubblewrap ') or command.startswith(prefix + 'bw ')) and not command.find("@"):
         # Sends a 10 by 10 grid of individually spoilered emotes
         bubble = str("||" + str(command.split(" ", 1)[1]).replace("\n", "") + "||")
         dimensions = math.floor(math.sqrt(2000/len(bubble)))
