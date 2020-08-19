@@ -214,7 +214,7 @@ async def on_message(message):
             elif warnmember.guild.get_role(742953865439215656) in warnmember.roles:
                 await warnmember.remove_roles(warnmember.guild.get_role(743205924059086918))
                 await warnmember.remove_roles(warnmember.guild.get_role(742953865439215656))
-                await message.channel.send("{} now has no strikes")
+                await message.channel.send("{} now has no strikes".format(warnmember.mention))
             else:
                 await message.channel.send("{} had no strikes".format(warnmember.mention))
 
