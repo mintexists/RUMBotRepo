@@ -168,7 +168,7 @@ async def on_message(message):
 
     if command.startswith(prefix + "warn") or command.startswith(prefix + "strike"):
         warnmember = message.mentions[0]
-        if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528 or message.author.id == 317456004843438082:
+        if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528:
             # If has 4 give 5 and warn
             if warnmember.guild.get_role(742954033115037807) in warnmember.roles:
                 await warnmember.add_roles(warnmember.guild.get_role(742954067642548285))
@@ -193,7 +193,7 @@ async def on_message(message):
 
     if command.startswith(prefix + "removewarn") or command.startswith(prefix + "removestrike"):
         warnmember = message.mentions[0]
-        if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528 or message.author.id == 317456004843438082:
+        if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528:
             # If has 5 remove 5
             if warnmember.guild.get_role(742954067642548285) in warnmember.roles:
                 await warnmember.remove_roles(warnmember.guild.get_role(742954067642548285))
