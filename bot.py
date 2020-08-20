@@ -7,7 +7,7 @@ import collections
 import datetime
 import math
 import traceback
-
+ 
 
 ###---------------------------------------------------------------------------- GAME STUFF
 amazonlinks = ['https://www.amazon.com/Secret-Hitler/dp/B01JKD4HYC/ref=sr_1_4?dchild=1&keywords=weird+stuff&qid=1597776538&sr=8-4',
