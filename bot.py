@@ -19,7 +19,7 @@ async def updateSuggestions():
             bot.suggestQueue.append(message)
 
 async def checkSuggestions():
-    #periodically checks least recent suggestion
+    #periodically checks suggestions for suggestions that need to be passed/rejected
     await bot.wait_until_ready()
     while True:
         for message in bot.suggestQueue:
@@ -27,7 +27,7 @@ async def checkSuggestions():
             denialsObject=get(message.reactions, emoji="❌")
             approvals=approvalsObject.count-(bot.user in set(await approvalsObject.users().flatten())) #gets # of yes reactions that isn't the bot
             denials=denialsObject.count-(bot.user in set(await denialsObject.users().flatten()))     #gets # of no reactions that isn't the bot
-            timeLimit=datetime.timedelta(seconds=6*3600*(1-(approvals+denials)/bot.memberCount))            #math to figure out the time limit of the suggestion - 0 people reacted yet=24 hrs, everyone reacted=0, half=12 hours
+            timeLimit=datetime.timedelta(seconds=6*3600*(1-(approvals+denials)/bot.memberCount))            #math to figure out the time limit of the suggestion - 0 people reacted yet=6 hrs
             print(timeLimit)
             if (message.created_at.utcnow()-message.created_at)>timeLimit:
                 bot.suggestQueue.remove(message)
@@ -151,5 +151,5 @@ async def on_member_join(member):
 # linux u can set it with export TOKEN=token
 # Macos is probs the same as linux
 
-token = "NzM4OTIyODM0NDI4MTY2MjM4.XyS9hA.ERWU-WTKxiNEliLcywCgsiHaqBY"
+token = str(os.getenv('TOKEN'))
 bot.run(token)
