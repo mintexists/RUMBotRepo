@@ -21,7 +21,7 @@ async def updateSuggestions():
     async for message in channel.history(oldest_first=True):
         if get(message.reactions, emoji="✅") and get(message.reactions, emoji="❌"):
             bot.suggestQueue.append(message)
-
+ 
 async def checkSuggestions():
     await bot.wait_until_ready()
     while True:
@@ -40,7 +40,7 @@ async def checkSuggestions():
                     embedVar = discord.Embed(title="❌ Denied", description = message.content , color=0xFF0000)
                     print("❌ Denied: \n" + message.content)
                 embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
-                embedVar.add_field(name="Votes:", value = "✅ " + str(approvals.count) + " ❌ " + str(denials.count) , inline=False)
+                embedVar.add_field(name="Votes:", value = "✅ " + str(approvals) + " ❌ " + str(denials) , inline=False)
                 embedVar.set_footer(text="Suggested at " + str(message.created_at.strftime("%b %d %Y %H:%M:%S")))
                 files = []
                 for attachments in message.attachments:
@@ -63,7 +63,6 @@ async def on_ready():
     embedVar.add_field(name="Instance ID:", value= randNum, inline=True)
     await bot.get_channel(740049560591925362).send(embed=embedVar)
 
-#Bot commands
 async def getLine(fileName,lineNum):
     fh=open(fileName)
     for i, row in enumerate(fh): 
@@ -89,18 +88,19 @@ async def on_message(message):
         for each in message.attachments:
             files.append(await each.to_file())
         await message.channel.send(embed=embedVar, files=files)
-
+    
+    # Eval command 
     if command.startswith(prefix + 'eval ') and message.author.id == 369988289354006528:
         try:
-            msg = await eval(command.split('eval ')[1])
-            await message.channel.send("```" + str(msg) + "```")
+            msg = await eval(command.split(' ', 1)[1])
+            await message.channel.send("```{}```".format(str(msg)))
         except:
             try:
                 msg = eval(command.split('eval ')[1])
-                await message.channel.send("```" + str(msg) + "```")
+                await message.channel.send("```{}```".format(str(msg)))
             except:
                 e = traceback.format_exc()
-                await message.channel.send("```" + str(e) + "```")
+                await message.channel.send("```{}```".format(str(e)))
 
     if command.startswith(prefix + 'info'):
         print("Info Called")
@@ -137,83 +137,86 @@ async def on_message(message):
             flipside = "Heads"
         else:
             flipside = "Tails"
-        print("Coin Flipped and Landed on " + flipside)
-        await message.channel.send("> The coin landed on " + flipside)
+        print("Coin Flipped and Landed on {}".format(flipside))
+        await message.channel.send("> The coin flipped and landed on {}".format(flipside))
 
     if command.startswith(prefix + 'rule '):
-        ruleNum = int(command.split("rule ")[1])
-        print("Rule " + str(ruleNum) + " Called")
+        ruleNum = int(command.split(" ", 1)[1])
+        print("Rule {} Called".format(str(ruleNum)))
         if 1<=ruleNum<=9:
             embedVar = discord.Embed(title=await getLine("rules.txt",2*ruleNum-1), description=await getLine("rules.txt",2*ruleNum), color=0xEC00FF)
             await message.channel.send(embed=embedVar)
         else:
             await message.channel.send("Invalid Rule Number")
 
-    if command.startswith(prefix + 'bubblewrap ') or command.startswith(prefix + 'bw '):
-        # Sends a 10 by 10 grid of individually spoilered emotes
-        bubble = str("||" + str(command.split(" ")[1]).replace("\n", "") + "||")
-        dimensions = math.floor(math.sqrt(2000/len(bubble)))
-        if dimensions > 15:
-            dimensions = 15
-        sendything = ((bubble * (dimensions - 2)) + "\n") * (dimensions - 2)
-        await message.channel.send(sendything)
+    if (command.startswith(prefix + 'bubblewrap ') or command.startswith(prefix + 'bw ')):
+        if not command.find("@") == -1:
+            await message.channel.send("You cant ping people with this")
+        else:
+            # Sends the biggest grid smaller then 15 of individually spoilered emotes
+            bubble = str("||" + str(command.split(" ", 1)[1]).replace("\n", "") + "||")
+            dimensions = math.floor(math.sqrt(2000/len(bubble)))
+            if dimensions > 15:
+                dimensions = 15
+            sendything = ((bubble * (dimensions - 2)) + "\n") * (dimensions - 2)
+            await message.channel.send(sendything)
 
     if command.startswith(prefix + "status ") and message.author.id == 369988289354006528:
-        status = str(message.content.split("status ")[1])
-        await message.channel.send("The status is now " + status)
+        status = str(message.content.split(" ", 1)[1])
+        await message.channel.send("The status is now {}".format(status))
         await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=status))
 
     if command.startswith(prefix + "warn") or command.startswith(prefix + "strike"):
         warnmember = message.mentions[0]
-        if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528 or message.author.id == 317456004843438082:
+        if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528:
             # If has 4 give 5 and warn
             if warnmember.guild.get_role(742954033115037807) in warnmember.roles:
                 await warnmember.add_roles(warnmember.guild.get_role(742954067642548285))
-                await message.channel.send(warnmember.mention + " now has 5 strikes")
+                await message.channel.send("{} now has 5 strikes".format(warnmember.mention))
             # If has 3 give 4
             elif warnmember.guild.get_role(742953961014689842) in warnmember.roles:
                 await warnmember.add_roles(warnmember.guild.get_role(742954033115037807))
-                await message.channel.send(warnmember.mention + " now has 4 strikes")
+                await message.channel.send("{} now has 4 strikes".format(warnmember.mention))
             # If has 2 give 3
             elif warnmember.guild.get_role(742953920225214584) in warnmember.roles:
                 await warnmember.add_roles(warnmember.guild.get_role(742953961014689842))
-                await message.channel.send(warnmember.mention + " now has 3 strikes")
+                await message.channel.send("{} now has 3 strikes".format(warnmember.mention))
             # If has 1 give 2
             elif warnmember.guild.get_role(742953865439215656) in warnmember.roles:
                 await warnmember.add_roles(warnmember.guild.get_role(742953920225214584))
-                await message.channel.send(warnmember.mention + " now has 2 strikes")
+                await message.channel.send("{} now has 2 strikes".format(warnmember.mention))
             # If none give one
             else:
                 await warnmember.add_roles(warnmember.guild.get_role(743205924059086918))
                 await warnmember.add_roles(warnmember.guild.get_role(742953865439215656))
-                await message.channel.send(warnmember.mention + " now has 1 strike")
+                await message.channel.send("{} now has 1 strike".format(warnmember.mention))
 
     if command.startswith(prefix + "removewarn") or command.startswith(prefix + "removestrike"):
         warnmember = message.mentions[0]
-        if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528 or message.author.id == 317456004843438082:
+        if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528:
             # If has 5 remove 5
             if warnmember.guild.get_role(742954067642548285) in warnmember.roles:
                 await warnmember.remove_roles(warnmember.guild.get_role(742954067642548285))
-                await message.channel.send(warnmember.mention + " now has 4 strikes")
+                await message.channel.send("{} now has 4 strikes".format(warnmember.mention))
             # If has 4 remove 4
             elif warnmember.guild.get_role(742954033115037807) in warnmember.roles:
                 await warnmember.remove_roles(warnmember.guild.get_role(742954033115037807))
-                await message.channel.send(warnmember.mention + " now has 3 strikes")
+                await message.channel.send("{} now has 3 strikes".format(warnmember.mention))
             # If has 3 remove 3
             elif warnmember.guild.get_role(742953961014689842) in warnmember.roles:
                 await warnmember.remove_roles(warnmember.guild.get_role(742953961014689842))
-                await message.channel.send(warnmember.mention + " now has 2 strikes")
+                await message.channel.send("{} now has 2 strikes".format(warnmember.mention))
             # If has 2 remove 2
             elif warnmember.guild.get_role(742953920225214584) in warnmember.roles:
                 await warnmember.remove_roles(warnmember.guild.get_role(742953920225214584))
-                await message.channel.send(warnmember.mention + " now has 1 strikes")
+                await message.channel.send("{} now has 1 strikes".format(warnmember.mention))
             # If has 1 remove 1
             elif warnmember.guild.get_role(742953865439215656) in warnmember.roles:
                 await warnmember.remove_roles(warnmember.guild.get_role(743205924059086918))
                 await warnmember.remove_roles(warnmember.guild.get_role(742953865439215656))
-                await message.channel.send(warnmember.mention + " now has no strikes")
+                await message.channel.send("{} now has no strikes".format(warnmember.mention))
             else:
-                await message.channel.send(warnmember.mention + " had no strikes")
+                await message.channel.send("{} had no strikes".format(warnmember.mention))
 
     if command.startswith(prefix + "addrole"):
         roles = message.role_mentions
@@ -266,21 +269,21 @@ async def on_message(message):
                 if opponentEmote == "✊":
                     await message.channel.send("Its a tie")
                 if opponentEmote == "🖐️":
-                    await message.channel.send(opponent.mention + " won")
+                    await message.channel.send("{} won".format(opponent.mention))
                 if opponentEmote == "✌️":
-                    await message.channel.send(challenger.mention + " won")
+                    await message.channel.send("{} won".format(challenger.mention))
             elif challengerEmote == "🖐️":
                 if opponentEmote == "✊":
-                    await message.channel.send(challenger.mention + " won")
+                    await message.channel.send("{} won".format(challenger.mention))
                 if opponentEmote == "🖐️":
                     await message.channel.send("Its a tie")
                 if opponentEmote == "✌️":
-                    await message.channel.send(opponent.mention + " won")
+                    await message.channel.send("{} won".format(opponent.mention))
             elif challengerEmote == "✌️":
                 if opponentEmote == "✊":
-                    await message.channel.send(opponent.mention + " won")
+                    await message.channel.send("{} won".format(opponent.mention))
                 if opponentEmote == "🖐️":
-                    await message.channel.send(challenger.mention + " won")
+                    await message.channel.send("{} won".format(challenger.mention))
                 if opponentEmote == "✌️":
                     await message.channel.send("Its a tie")
 
@@ -306,7 +309,7 @@ async def on_reaction_remove(reaction, user):
 async def on_member_join(member):
     # Ping welcomer and consulate when a new member joins the server
     if member.bot == False:
-        await member.guild.get_channel(739647916905332846).send(member.mention + " has joined.\n" + member.guild.get_role(736316470098657342).mention)
+        await member.guild.get_channel(739647916905332846).send("{} has joined.\n{}".format(member.mention, member.guild.get_role(736316470098657342).mention))
         await member.add_roles(member.guild.get_role(743206825176072345), member.guild.get_role(743206597387485324))
         bot.memberCount+=1
     print(member.nick + " Joined")
@@ -315,7 +318,6 @@ async def on_member_join(member):
 async def on_member_leave(member):
     # Ping welcomer and consulate when a new member joins the server
     if member.bot == False:
-        await member.guild.get_channel(739647916905332846).send(member.mention + " has left.\n" + member.guild.get_role(736316470098657342).mention)
         bot.memberCount-=1
     print(member.nick + " Left")
 
