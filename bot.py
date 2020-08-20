@@ -49,7 +49,7 @@ prefix = "r?"
 randNum = random.random()
 bot = discord.Client()
 bot.suggestQueue=collections.deque()
-
+ 
 # Activity
 async def updateSuggestions():
     channel=bot.get_channel(737807052625412208)
