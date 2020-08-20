@@ -215,10 +215,11 @@ async def on_message(message):
             await message.channel.send("You cant ping people with this")
         else:
             # Sends the biggest grid smaller then 15 of individually spoilered emotes
+            maxSize = 10
             bubble = str("||" + str(command.split(" ", 1)[1]).replace("\n", "") + "||")
             dimensions = math.floor(math.sqrt(2000/len(bubble)))
-            if dimensions > 15:
-                dimensions = 15
+            if dimensions > maxSize:
+                dimensions = maxSize
             sendything = ((bubble * (dimensions - 2)) + "\n") * (dimensions - 2)
             await message.channel.send(sendything)
 
