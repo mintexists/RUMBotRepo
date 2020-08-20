@@ -67,7 +67,7 @@ async def checkSuggestions():
             denials=denialsObject.count-(bot.user in set(await denialsObject.users().flatten()))     #gets # of no reactions that isn't the bot
             timeLimit=datetime.timedelta(seconds=6*3600*(1-(approvals+denials)/bot.memberCount))            #math to figure out the time limit of the suggestion - 0 people reacted yet=6 hrs
             if (message.created_at.utcnow()-message.created_at)>timeLimit:
-                bot.suggestQueue.remove(message)
+                #bot.suggestQueue.remove(message)
                 if approvals>denials:
                     embedVar = discord.Embed(title="✅ Approved", description = message.content , color=0x00FF04)
                     print("✅ Approved: \n" + message.content)
