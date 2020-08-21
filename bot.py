@@ -376,7 +376,7 @@ async def on_member_join(member):
         await member.guild.get_channel(739647916905332846).send("{} has joined.\n{}".format(member.mention, member.guild.get_role(736316470098657342).mention))
         await member.add_roles(member.guild.get_role(743206825176072345), member.guild.get_role(743206597387485324))
         bot.memberCount+=1
-    print(member.nick + " Joined")
+    print(member.name + " Joined")
 
 @bot.event
 async def on_member_leave(member):
