@@ -61,6 +61,8 @@ async def checkSuggestions():
     await bot.wait_until_ready()
     while True:
         for message in list(bot.suggestQueue):
+            print(message)
+            print(list(bot.suggestQueue))
             approvalsObject=get(message.reactions, emoji="✅")
             denialsObject=get(message.reactions, emoji="❌")
             approvals=approvalsObject.count-(bot.user in set(await approvalsObject.users().flatten())) #gets # of yes reactions that isn't the bot
