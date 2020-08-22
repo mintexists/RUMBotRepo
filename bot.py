@@ -157,7 +157,7 @@ async def on_message(message):
             await message.channel.send("```{}```".format(str(msg)))
         except:
             try:
-                msg = eval(command.split('eval ')[1])
+                msg = eval(command.split('eval ', 1)[1])
                 await message.channel.send("```{}```".format(str(msg)))
             except:
                 e = traceback.format_exc()
