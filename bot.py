@@ -150,6 +150,9 @@ async def on_message(message):
             files.append(await each.to_file())
         await message.channel.send(embed=embedVar, files=files)
     
+    if command.startswith(prefix + "logbreak"):
+        print("\n"*10)
+        
     # Eval command 
     if command.startswith(prefix + 'eval ') and message.author.id == 369988289354006528:
         try:
