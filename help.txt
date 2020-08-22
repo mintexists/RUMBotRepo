@@ -10,4 +10,3 @@ r?test
 Sends the bot instance IDs
 r?rockpaperscissors or rps
 Play Rock Paper Scissors against another user
-For more help ask one of the Consulate
