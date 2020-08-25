@@ -78,9 +78,12 @@ async def checkSuggestions():
                 embedVar.add_field(name="Votes:", value = "✅ " + str(approvals) + " ❌ " + str(denials) , inline=False)
                 embedVar.set_footer(text="Suggested at " + str(message.created_at.strftime("%b %d %Y %H:%M:%S")))
                 files = []
-                for attachments in message.attachments:
-                    files.append(await attachments.to_file())
-                await bot.get_channel(739172158948900925).send(embed=embedVar,files=files)
+                for each in message.attachments:
+                    files.append(await each.to_file())
+                if len(files) > 0:
+                    fileMessage = await bot.get_guild(700359436203458581).get_channel(718277944153210961).send(files=files)
+                    embedVar.set_image(url = fileMessage.attachments[0].url)
+                await bot.get_channel(739172158948900925).send(embed=embedVar)
                 await message.delete()
         await asyncio.sleep(5)
 
