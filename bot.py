@@ -7,6 +7,7 @@ import collections
 import datetime
 import math
 import traceback
+import inspect
  
 
 ###---------------------------------------------------------------------------- GAME STUFF
@@ -161,16 +162,12 @@ async def on_message(message):
         
     # Eval command 
     if command.startswith(prefix + 'eval ') and message.author.id == 369988289354006528:
-        try:
-            msg = await eval(command.split(' ', 1)[1])
+        msg = eval(message.content.split(' ', 1)[1])
+        if inspect.isawaitable(msg):
+            await message.channel.send("```{}```".format(str(await msg)))
+        else:
             await message.channel.send("```{}```".format(str(msg)))
-        except:
-            try:
-                msg = eval(command.split('eval ', 1)[1])
-                await message.channel.send("```{}```".format(str(msg)))
-            except:
-                e = traceback.format_exc()
-                await message.channel.send("```{}```".format(str(e)))
+
 
     if command.startswith(prefix + 'info'):
         print("Info Called")
