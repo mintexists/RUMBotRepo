@@ -148,7 +148,8 @@ async def on_message(message):
         files = []
         for each in message.attachments:
             files.append(await each.to_file())
-        fileMessage = await bot.get_guild(700359436203458581).get_channel(718277944153210961).send(files=files)
+        if len(files) > 0:
+            fileMessage = await bot.get_guild(700359436203458581).get_channel(718277944153210961).send(files=files)
         embedVar.set_image(url = fileMessage.attachments[0].url)
         await message.channel.send(embed=embedVar)
     
