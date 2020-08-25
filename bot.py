@@ -114,7 +114,7 @@ async def on_message(message):
 
     ##GAMES
     # guessing
-    if message.content.startswith("r?guess"):
+    if command.startswith(prefix + "guess"):
         channel = message.channel
         await channel.send("Guess the number between 0-10 by typing it! (it will end once you guess correctly)")
         number1 = random.randint(1, 10)
@@ -129,12 +129,12 @@ async def on_message(message):
         await channel.send("Correct answer {.author}!".format(msg))
         
         # amazon
-    if message.content.startswith("r?amazon"):
+    if command.startswith(prefix + "amazon"):
         funkylinks = random.choice(amazonlinks)
         await message.channel.send(funkylinks)
         
         # embarrass me
-    if message.content.startswith('r?embarrassme'):
+    if command.startswith(prefix + "embarrasme"):
         embar = random.choice(embarrass)
         await message.channel.send(embar + ' from {}!'.format(message.author.mention))
 
