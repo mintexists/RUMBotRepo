@@ -107,7 +107,7 @@ async def getLine(fileName,lineNum):
 @bot.event
 async def on_message(message):
     command = message.content.lower()
-    if command == 'voteEva':
+    if command == 'voteeva':
         await message.channel.send("Vote for Evalyn, she made me!")
     ##GAMES
     # guessing
