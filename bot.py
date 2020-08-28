@@ -49,43 +49,36 @@ prefix = "r?"
 
 randNum = random.random()
 bot = discord.Client()
-bot.suggestQueue=collections.deque()
  
-# Activity
-async def updateSuggestions():
-    channel=bot.get_channel(737807052625412208)
-    async for message in channel.history(oldest_first=True):
-        if get(message.reactions, emoji="✅") and get(message.reactions, emoji="❌"):
-            bot.suggestQueue.append(message)
- 
+# Activity 
 async def checkSuggestions():
     await bot.wait_until_ready()
     while True:
-        for message in list(bot.suggestQueue):
-            approvalsObject=get(message.reactions, emoji="✅")
-            denialsObject=get(message.reactions, emoji="❌")
-            approvals=approvalsObject.count-(bot.user in set(await approvalsObject.users().flatten())) #gets # of yes reactions that isn't the bot
-            denials=denialsObject.count-(bot.user in set(await denialsObject.users().flatten()))     #gets # of no reactions that isn't the bot
-            timeLimit=datetime.timedelta(seconds=6*3600*(1-(approvals+denials)/bot.memberCount))            #math to figure out the time limit of the suggestion - 0 people reacted yet=6 hrs
-            if (message.created_at.utcnow()-message.created_at)>timeLimit:
-                bot.suggestQueue.remove(message)
-                if approvals>denials:
-                    embedVar = discord.Embed(title="✅ Approved", description = message.content , color=0x00FF04)
-                    print("✅ Approved: \n" + message.content)
-                else:
-                    embedVar = discord.Embed(title="❌ Denied", description = message.content , color=0xFF0000)
-                    print("❌ Denied: \n" + message.content)
-                embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
-                embedVar.add_field(name="Votes:", value = "✅ " + str(approvals) + " ❌ " + str(denials) , inline=False)
-                embedVar.set_footer(text="Suggested at " + str(message.created_at.strftime("%b %d %Y %H:%M:%S")))
-                files = []
-                for each in message.attachments:
-                    files.append(await each.to_file())
-                if len(files) > 0:
-                    fileMessage = await bot.get_guild(700359436203458581).get_channel(718277944153210961).send(files=files)
-                    embedVar.set_image(url = fileMessage.attachments[0].url)
-                await bot.get_channel(739172158948900925).send(embed=embedVar)
-                await message.delete()
+        async for message in bot.get_channel(737807052625412208).history(oldest_first=True):
+            if get(message.reactions, emoji="✅") and get(message.reactions, emoji="❌"):
+                approvalsObject=get(message.reactions, emoji="✅")
+                denialsObject=get(message.reactions, emoji="❌")
+                approvals=approvalsObject.count-(bot.user in set(await approvalsObject.users().flatten()))      #gets # of yes reactions that isn't the bot
+                denials=denialsObject.count-(bot.user in set(await denialsObject.users().flatten()))            #gets # of no reactions that isn't the bot
+                timeLimit=datetime.timedelta(seconds=6*3600*(1-(approvals+denials)/bot.memberCount))            #math to figure out the time limit of the suggestion - 0 people reacted yet=6 hrs
+                if (message.created_at.utcnow()-message.created_at)>timeLimit:
+                    if approvals>denials:
+                        embedVar = discord.Embed(title="✅ Approved", description = message.content , color=0x00FF04)
+                        print("✅ Approved: \n" + message.content)
+                    else:
+                        embedVar = discord.Embed(title="❌ Denied", description = message.content , color=0xFF0000)
+                        print("❌ Denied: \n" + message.content)
+                    embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
+                    embedVar.add_field(name="Votes:", value = "✅ " + str(approvals) + " ❌ " + str(denials) , inline=False)
+                    embedVar.set_footer(text="Suggested at " + str(message.created_at.strftime("%b %d %Y %H:%M:%S")))
+                    files = []
+                    for each in message.attachments:
+                        files.append(await each.to_file())
+                    if len(files) > 0:
+                        fileMessage = await bot.get_guild(700359436203458581).get_channel(718277944153210961).send(files=files)
+                        embedVar.set_image(url = fileMessage.attachments[0].url)
+                    await bot.get_channel(739172158948900925).send(embed=embedVar)
+                    await message.delete()
         await asyncio.sleep(5)
 
 
@@ -93,7 +86,6 @@ async def checkSuggestions():
 async def on_ready():
     # Set Status
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Republic of United Members"))
-    await updateSuggestions()
     bot.memberCount=len([m for m in bot.get_guild(736306540671271036).members if not m.bot])
     bot.loop.create_task(checkSuggestions())
     # Send bot online notices
@@ -142,7 +134,6 @@ async def on_message(message):
     if message.channel.id == 737807052625412208:
         await message.add_reaction("✅")
         await message.add_reaction("❌")
-        bot.suggestQueue.append(message)
         print("New Suggestion: " + message.content)
 
     # General Commands
@@ -287,12 +278,15 @@ async def on_message(message):
                 await message.channel.send("{} had no strikes".format(warnmember.mention))
 
     if command.startswith(prefix + "addrole"):
-        roles = message.role_mentions
+        roles = command.split(" ")
+        roles.remove("r?addrole")
         if message.guild.get_role(736316470098657342) in message.author.roles or message.author.id == 369988289354006528 or message.author.id == 317456004843438082:
+            await message.channel.send("Starting...")
             for role in roles:
                 for member in message.guild.members:
                     if not member.bot:
-                        await member.add_roles(role)
+                        await member.add_roles(message.guild.get_role(int(role)))
+            await message.channel.send("Done!")
 
     if command.startswith(prefix + "rockpaperscissors") or command.startswith(prefix + "rps"):
         if len(message.mentions)>0:
@@ -417,7 +411,9 @@ async def on_member_join(member):
     # Ping welcomer and consulate when a new member joins the server
     if member.bot == False:
         await member.guild.get_channel(739647916905332846).send("{} has joined.\n{}".format(member.mention, member.guild.get_role(736316470098657342).mention))
-        await member.add_roles(member.guild.get_role(743206825176072345), member.guild.get_role(743206597387485324))
+        with open("roles.txt") as file_in:
+            for line in file_in:
+                await member.add_roles(member.guild.get_role(int(line)))
         bot.memberCount+=1
     print(member.name + " Joined")
 
