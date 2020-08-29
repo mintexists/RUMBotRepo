@@ -8,7 +8,7 @@ import datetime
 import math
 import traceback
 import inspect
- 
+
 
 ###---------------------------------------------------------------------------- GAME STUFF
 amazonlinks = ['https://www.amazon.com/dp/B01JKD4HYC/',
