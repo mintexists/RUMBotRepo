@@ -120,6 +120,8 @@ def insert_returns(body):
 
 @bot.command(name="eval")
 async def eval_fn(ctx, *, cmd):
+    if not ctx.author.id == 369988289354006528:
+        return
     """Evaluates input.
     Input is interpreted as newline seperated statements.
     If the last statement is an expression, that is the return value.
