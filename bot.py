@@ -80,14 +80,14 @@ async def checkSuggestions():
                             contents = message.clean_content.split("\n", 1)
                             await addCard("5f4d3b664357e92fc9968695", f"{contents[0]}", f"{contents[1]}\n{url}\nSuggested By: {message.author}")
                         except:
-                            await message.author.send("Please Redo your suggestion in the proper format")
+                            await message.author.send(f"Please Redo your suggestion in the proper format\n```{message.clean_content}```")
                     else:
                         print("❌ Denied: \n" + message.content)
                         try:
                             contents = message.clean_content.split("\n", 1)
                             await addCard("5f4d577c418ce413102db964", f"{contents[0]}", f"{contents[1]}\n{url}\n\nSuggested By: {message.author}")
                         except:
-                            await message.author.send("Please Redo your suggestion in the proper format")
+                            await message.author.send(f"Please Redo your suggestion in the proper format\n```{message.clean_content}```")
                     await message.delete()
         await asyncio.sleep(5)
 
