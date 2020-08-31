@@ -65,7 +65,7 @@ async def checkSuggestions():
                 denialsObject=get(message.reactions, emoji="❌")
                 approvals=approvalsObject.count-(bot.user in set(await approvalsObject.users().flatten()))      #gets # of yes reactions that isn't the bot
                 denials=denialsObject.count-(bot.user in set(await denialsObject.users().flatten()))            #gets # of no reactions that isn't the bot
-                timeLimit=datetime.timedelta(seconds=.001*3600*(1-(approvals+denials)/bot.memberCount))            #math to figure out the time limit of the suggestion - 0 people reacted yet=6 hrs
+                timeLimit=datetime.timedelta(seconds=6*3600*(1-(approvals+denials)/bot.memberCount))            #math to figure out the time limit of the suggestion - 0 people reacted yet=6 hrs
                 if (message.created_at.utcnow()-message.created_at)>timeLimit:
                     files = []
                     url = ""
