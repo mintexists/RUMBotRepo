@@ -10,6 +10,8 @@ import traceback
 import inspect
 from discord.ext import commands
 import ast
+import requests
+
  
 
 
@@ -63,24 +65,21 @@ async def checkSuggestions():
                 denialsObject=get(message.reactions, emoji="❌")
                 approvals=approvalsObject.count-(bot.user in set(await approvalsObject.users().flatten()))      #gets # of yes reactions that isn't the bot
                 denials=denialsObject.count-(bot.user in set(await denialsObject.users().flatten()))            #gets # of no reactions that isn't the bot
-                timeLimit=datetime.timedelta(seconds=6*3600*(1-(approvals+denials)/bot.memberCount))            #math to figure out the time limit of the suggestion - 0 people reacted yet=6 hrs
+                timeLimit=datetime.timedelta(seconds=.01*3600*(1-(approvals+denials)/bot.memberCount))            #math to figure out the time limit of the suggestion - 0 people reacted yet=6 hrs
                 if (message.created_at.utcnow()-message.created_at)>timeLimit:
                     if approvals>denials:
-                        embedVar = discord.Embed(title="✅ Approved", description = message.content , color=0x00FF04)
                         print("✅ Approved: \n" + message.content)
+                        contents = message.clean_content.split("\n", 1)
+                        await addCard("5f4d3b664357e92fc9968695", f"{contents[0]}", f"{contents[1]}\n\nSuggested By: {message.author}")
                     else:
-                        embedVar = discord.Embed(title="❌ Denied", description = message.content , color=0xFF0000)
                         print("❌ Denied: \n" + message.content)
-                    embedVar.add_field(name="Suggested by:", value = message.author.mention, inline=False)
-                    embedVar.add_field(name="Votes:", value = "✅ " + str(approvals) + " ❌ " + str(denials) , inline=False)
-                    embedVar.set_footer(text="Suggested at " + str(message.created_at.strftime("%b %d %Y %H:%M:%S")))
+                        contents = message.clean_content.split("\n", 1)
+                        await addCard("5f4d3b664357e92fc9968695", f"{contents[0]}", f"{contents[1]}\n\nSuggested By: {message.author}")
                     files = []
                     for each in message.attachments:
                         files.append(await each.to_file())
                     if len(files) > 0:
                         fileMessage = await bot.get_guild(700359436203458581).get_channel(718277944153210961).send(files=files)
-                        embedVar.set_image(url = fileMessage.attachments[0].url)
-                    await bot.get_channel(739172158948900925).send(embed=embedVar)
                     await message.delete()
         await asyncio.sleep(5)
 
@@ -97,11 +96,28 @@ async def on_ready():
     embedVar.add_field(name="Instance ID:", value= randNum, inline=True)
     await bot.get_channel(740049560591925362).send(embed=embedVar)
 
+async def addCard(listID, name, desc):
+    query = {
+        'key': '56e5e4a9cc439b5d1eb95c16bcc67a13',
+        'token': 'e13a723dc94eacf48918fdf7f0c9910b6dd54f319d18d84af4678e364af6e669',
+        'idList': listID,
+        'name': name,
+        'desc': desc,
+        "idLabels": ["5f4d59315382c2827ea0d0a9"]
+    }
+
+    requests.request(
+        "POST",
+        "https://api.trello.com/1/cards",
+        params=query
+    )
+
 async def getLine(fileName,lineNum):
     fh=open(fileName)
     for i, row in enumerate(fh): 
         if i+1==lineNum: 
             return row
+
 def insert_returns(body):
     # insert return stmt if the last expression is a expression statement
     if isinstance(body[-1], ast.Expr):
