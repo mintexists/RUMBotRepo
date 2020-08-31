@@ -65,27 +65,29 @@ async def checkSuggestions():
                 denialsObject=get(message.reactions, emoji="❌")
                 approvals=approvalsObject.count-(bot.user in set(await approvalsObject.users().flatten()))      #gets # of yes reactions that isn't the bot
                 denials=denialsObject.count-(bot.user in set(await denialsObject.users().flatten()))            #gets # of no reactions that isn't the bot
-                timeLimit=datetime.timedelta(seconds=6*3600*(1-(approvals+denials)/bot.memberCount))            #math to figure out the time limit of the suggestion - 0 people reacted yet=6 hrs
+                timeLimit=datetime.timedelta(seconds=.001*3600*(1-(approvals+denials)/bot.memberCount))            #math to figure out the time limit of the suggestion - 0 people reacted yet=6 hrs
                 if (message.created_at.utcnow()-message.created_at)>timeLimit:
+                    files = []
+                    url = ""
+                    for each in message.attachments:
+                        files.append(await each.to_file())
+                    if len(files) > 0:
+                        fileMessage = await bot.get_guild(700359436203458581).get_channel(718277944153210961).send(files=files)
+                        url = f"{fileMessage.attachments[0].url}\n"
                     if approvals>denials:
                         print("✅ Approved: \n" + message.content)
                         try:
                             contents = message.clean_content.split("\n", 1)
-                            await addCard("5f4d3b664357e92fc9968695", f"{contents[0]}", f"{contents[1]}\n\nSuggested By: {message.author}")
+                            await addCard("5f4d3b664357e92fc9968695", f"{contents[0]}", f"{contents[1]}\n{url}\nSuggested By: {message.author}")
                         except:
                             await message.author.send("Please Redo your suggestion in the proper format")
                     else:
                         print("❌ Denied: \n" + message.content)
                         try:
                             contents = message.clean_content.split("\n", 1)
-                            await addCard("5f4d3b664357e92fc9968695", f"{contents[0]}", f"{contents[1]}\n\nSuggested By: {message.author}")
+                            await addCard("5f4d577c418ce413102db964", f"{contents[0]}", f"{contents[1]}\n{url}\n\nSuggested By: {message.author}")
                         except:
                             await message.author.send("Please Redo your suggestion in the proper format")
-                    files = []
-                    for each in message.attachments:
-                        files.append(await each.to_file())
-                    if len(files) > 0:
-                        fileMessage = await bot.get_guild(700359436203458581).get_channel(718277944153210961).send(files=files)
                     await message.delete()
         await asyncio.sleep(5)
 
