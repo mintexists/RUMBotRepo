@@ -8,3 +8,5 @@ r?bubblewrap or bw
 Makes a bubblewrap with text or emote
 r?test
 Sends the bot instance IDs
+r?rockpaperscissors or rps
+Play Rock Paper Scissors against another user or the bot
