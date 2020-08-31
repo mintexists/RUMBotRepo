@@ -345,10 +345,13 @@ async def rps(ctx):
         def check(reaction, user):
             return (reaction.emoji in ["✊", "🖐️", "✌️"]) and (user == ctx.author)
         reaction, user = await bot.wait_for('reaction_add', timeout=60.0, check=check)
-        if random.randint(0,2) == 1:
+        rand = random.randint(0,2)
+        if rand == 1:
             await ctx.send("You Win!")
-        else:
+        elif rand == 2:
             await ctx.send("You Lose!")
+        else:
+            await ctx.send("You Tied!")
 
 @bot.command(name="guess")
 async def guess(ctx):
