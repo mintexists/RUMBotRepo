@@ -90,7 +90,7 @@ async def on_ready():
     # Set Status
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Republic of United Members"))
     bot.memberCount=len([m for m in bot.get_guild(736306540671271036).members if not m.bot])
-    bot.loop.create_task(checkSuggestions())
+    # bot.loop.create_task(checkSuggestions())
     # Send bot online notices
     print(("\n" * 5) + "Bot is online. Instance ID is " + str(randNum))
     embedVar=discord.Embed(title=":green_circle: Bot is online", color=0x00ff62)
