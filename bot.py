@@ -69,12 +69,18 @@ async def checkSuggestions():
                 if (message.created_at.utcnow()-message.created_at)>timeLimit:
                     if approvals>denials:
                         print("✅ Approved: \n" + message.content)
-                        contents = message.clean_content.split("\n", 1)
-                        await addCard("5f4d3b664357e92fc9968695", f"{contents[0]}", f"{contents[1]}\n\nSuggested By: {message.author}")
+                        try:
+                            contents = message.clean_content.split("\n", 1)
+                            await addCard("5f4d3b664357e92fc9968695", f"{contents[0]}", f"{contents[1]}\n\nSuggested By: {message.author}")
+                        except:
+                            await message.author.send("Please Redo your suggestion in the proper format")
                     else:
                         print("❌ Denied: \n" + message.content)
-                        contents = message.clean_content.split("\n", 1)
-                        await addCard("5f4d3b664357e92fc9968695", f"{contents[0]}", f"{contents[1]}\n\nSuggested By: {message.author}")
+                        try:
+                            contents = message.clean_content.split("\n", 1)
+                            await addCard("5f4d3b664357e92fc9968695", f"{contents[0]}", f"{contents[1]}\n\nSuggested By: {message.author}")
+                        except:
+                            await message.author.send("Please Redo your suggestion in the proper format")
                     files = []
                     for each in message.attachments:
                         files.append(await each.to_file())
