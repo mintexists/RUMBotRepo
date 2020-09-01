@@ -100,7 +100,7 @@ async def on_ready():
     bot.loop.create_task(checkSuggestions())
     # Send bot online notices
     print(("Bot is online. Instance ID is " + str(randNum))
-    embedVar=discord.Embed(title=":green_circle: Bot is online", color=0x00ff62)
+    embedVar=discord.Embed(title=":green_circle: Bot is online")
     embedVar.add_field(name="Instance ID:", value= randNum, inline=True)
     await bot.get_channel(740049560591925362).send(embed=embedVar)
 
