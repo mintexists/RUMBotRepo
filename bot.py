@@ -403,8 +403,8 @@ async def vote(ctx, url):
     for member in ctx.guild.members:
         if not member.bot:
             id = ids.pop(0)
-            print(f"Please Vote on {url}, your token is {id}")
-            #await member.send(f"Please Vote on {url}, your token is {id}")
+            #print(f"Please Vote on {url}, your token is {id}")
+            await member.send(f"Please Vote on {url}, your token is {id}")
 @bot.event
 async def on_message(message):
     # Add reaction to the suggestions
