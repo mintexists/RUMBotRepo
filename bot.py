@@ -52,7 +52,10 @@ prefix = "r?"
 
 randNum = random.random()
 bot = commands.Bot(command_prefix="r?", help_command=None, case_insensitive=True)
- 
+
+async def is_eva(ctx):
+    return ctx.author.id == 369988289354006528
+
 # Activity 
 async def checkSuggestions():
     await bot.wait_until_ready()
@@ -78,14 +81,14 @@ async def checkSuggestions():
                             contents = message.clean_content.split("\n", 1)
                             await addCard("5f4d3b664357e92fc9968695", f"{contents[0]}", f"{contents[1]}\n{url}\nSuggested By: {message.author}")
                         except:
-                            await message.author.send(f"Please Redo your suggestion in the proper format\n```{message.clean_content}```")
+                            await addCard("5f4d3b664357e92fc9968695", f"{message.clean_content}", f"{url}\nSuggested By: {message.author}")
                     else:
                         print("❌ Denied: \n" + message.content)
                         try:
                             contents = message.clean_content.split("\n", 1)
                             await addCard("5f4d577c418ce413102db964", f"{contents[0]}", f"{contents[1]}\n{url}\n\nSuggested By: {message.author}")
                         except:
-                            await message.author.send(f"Please Redo your suggestion in the proper format\n```{message.clean_content}```")
+                            await addCard("5f4d577c418ce413102db964", f"{message.clean_content}", f"{url}\nSuggested By: {message.author}")
                     await message.delete()
         await asyncio.sleep(5)
 
@@ -141,9 +144,8 @@ def insert_returns(body):
 
 
 @bot.command(name="eval")
+@commands.check(is_eva)
 async def eval_fn(ctx, *, cmd):
-    if not ctx.author.id == 369988289354006528:
-        return
     """Evaluates input.
     Input is interpreted as newline seperated statements.
     If the last statement is an expression, that is the return value.
@@ -264,68 +266,68 @@ async def bubbbleWrap(ctx, bubbleContents):
     await ctx.send(bubbleGrid, allowed_mentions=discord.AllowedMentions(everyone=False, users=False, roles=False))
 
 @bot.command(name="warn", aliases=["strike", "addwarn", "addstrike"])
+@commands.has_any_role(736316576126468097) 
 async def warn(ctx):
     warnmember = ctx.message.mentions[0]
-    if ctx.guild.get_role(736316470098657342) in ctx.author.roles or ctx.author.id == 369988289354006528:
-        # If has 4 give 5 and warn
-        if warnmember.guild.get_role(742954033115037807) in warnmember.roles:
-            await warnmember.add_roles(warnmember.guild.get_role(742954067642548285))
-            await ctx.send("{} now has 5 strikes".format(warnmember.mention))
-        # If has 3 give 4
-        elif warnmember.guild.get_role(742953961014689842) in warnmember.roles:
-            await warnmember.add_roles(warnmember.guild.get_role(742954033115037807))
-            await ctx.send("{} now has 4 strikes".format(warnmember.mention))
-            # If has 2 give 3
-        elif warnmember.guild.get_role(742953920225214584) in warnmember.roles:
-            await warnmember.add_roles(warnmember.guild.get_role(742953961014689842))
-            await ctx.send("{} now has 3 strikes".format(warnmember.mention))
-        # If has 1 give 2
-        elif warnmember.guild.get_role(742953865439215656) in warnmember.roles:
-            await warnmember.add_roles(warnmember.guild.get_role(742953920225214584))
-            await ctx.send("{} now has 2 strikes".format(warnmember.mention))
-        # If none give one
-        else:
-            await warnmember.add_roles(warnmember.guild.get_role(743205924059086918))
-            await warnmember.add_roles(warnmember.guild.get_role(742953865439215656))
-            await ctx.send("{} now has 1 strike".format(warnmember.mention))
+    # If has 4 give 5 and warn
+    if warnmember.guild.get_role(742954033115037807) in warnmember.roles:
+        await warnmember.add_roles(warnmember.guild.get_role(742954067642548285))
+        await ctx.send("{} now has 5 strikes".format(warnmember.mention))
+    # If has 3 give 4
+    elif warnmember.guild.get_role(742953961014689842) in warnmember.roles:
+        await warnmember.add_roles(warnmember.guild.get_role(742954033115037807))
+        await ctx.send("{} now has 4 strikes".format(warnmember.mention))
+        # If has 2 give 3
+    elif warnmember.guild.get_role(742953920225214584) in warnmember.roles:
+        await warnmember.add_roles(warnmember.guild.get_role(742953961014689842))
+        await ctx.send("{} now has 3 strikes".format(warnmember.mention))
+    # If has 1 give 2
+    elif warnmember.guild.get_role(742953865439215656) in warnmember.roles:
+        await warnmember.add_roles(warnmember.guild.get_role(742953920225214584))
+        await ctx.send("{} now has 2 strikes".format(warnmember.mention))
+    # If none give one
+    else:
+        await warnmember.add_roles(warnmember.guild.get_role(743205924059086918))
+        await warnmember.add_roles(warnmember.guild.get_role(742953865439215656))
+        await ctx.send("{} now has 1 strike".format(warnmember.mention))
 
 @bot.command(name="removewarn", aliases=["removestrike"])
+@commands.has_any_role(736316576126468097) 
 async def removewarn(ctx):
     warnmember = ctx.message.mentions[0]
-    if ctx.guild.get_role(736316470098657342) in ctx.author.roles or ctx.author.id == 369988289354006528:
-        # If has 5 remove 5
-        if warnmember.guild.get_role(742954067642548285) in warnmember.roles:
-            await warnmember.remove_roles(warnmember.guild.get_role(742954067642548285))
-            await ctx.send("{} now has 4 strikes".format(warnmember.mention))
-        # If has 4 remove 4
-        elif warnmember.guild.get_role(742954033115037807) in warnmember.roles:
-            await warnmember.remove_roles(warnmember.guild.get_role(742954033115037807))
-            await ctx.send("{} now has 3 strikes".format(warnmember.mention))
-        # If has 3 remove 3
-        elif warnmember.guild.get_role(742953961014689842) in warnmember.roles:
-            await warnmember.remove_roles(warnmember.guild.get_role(742953961014689842))
-            await ctx.send("{} now has 2 strikes".format(warnmember.mention))
-        # If has 2 remove 2
-        elif warnmember.guild.get_role(742953920225214584) in warnmember.roles:
-            await warnmember.remove_roles(warnmember.guild.get_role(742953920225214584))
-            await ctx.send("{} now has 1 strikes".format(warnmember.mention))
-        # If has 1 remove 1
-        elif warnmember.guild.get_role(742953865439215656) in warnmember.roles:
-            await warnmember.remove_roles(warnmember.guild.get_role(743205924059086918))
-            await warnmember.remove_roles(warnmember.guild.get_role(742953865439215656))
-            await ctx.send("{} now has no strikes".format(warnmember.mention))
-        else:
-            await ctx.send("{} had no strikes".format(warnmember.mention))
+    # If has 5 remove 5
+    if warnmember.guild.get_role(742954067642548285) in warnmember.roles:
+        await warnmember.remove_roles(warnmember.guild.get_role(742954067642548285))
+        await ctx.send("{} now has 4 strikes".format(warnmember.mention))
+    # If has 4 remove 4
+    elif warnmember.guild.get_role(742954033115037807) in warnmember.roles:
+        await warnmember.remove_roles(warnmember.guild.get_role(742954033115037807))
+        await ctx.send("{} now has 3 strikes".format(warnmember.mention))
+    # If has 3 remove 3
+    elif warnmember.guild.get_role(742953961014689842) in warnmember.roles:
+        await warnmember.remove_roles(warnmember.guild.get_role(742953961014689842))
+        await ctx.send("{} now has 2 strikes".format(warnmember.mention))
+    # If has 2 remove 2
+    elif warnmember.guild.get_role(742953920225214584) in warnmember.roles:
+        await warnmember.remove_roles(warnmember.guild.get_role(742953920225214584))
+        await ctx.send("{} now has 1 strikes".format(warnmember.mention))
+    # If has 1 remove 1
+    elif warnmember.guild.get_role(742953865439215656) in warnmember.roles:
+        await warnmember.remove_roles(warnmember.guild.get_role(743205924059086918))
+        await warnmember.remove_roles(warnmember.guild.get_role(742953865439215656))
+        await ctx.send("{} now has no strikes".format(warnmember.mention))
+    else:
+        await ctx.send("{} had no strikes".format(warnmember.mention))
 
 @bot.command(name="addrole")
+@commands.has_any_role(736316576126468097)
 async def addrole(ctx, *roles):
-    if ctx.guild.get_role(736316470098657342) in ctx.author.roles or ctx.author.id == 369988289354006528:
-        await ctx.send("Starting...")
-        for role in roles:
-            for member in ctx.guild.members:
-                if not member.bot and not role in member.roles:
-                    await member.add_roles(ctx.guild.get_role(int(role)))
-        await ctx.send("Done!")
+    await ctx.send("Starting...")
+    for role in roles:
+        for member in ctx.guild.members:
+            if not member.bot and not role in member.roles:
+                await member.add_roles(ctx.guild.get_role(int(role)))
+    await ctx.send("Done!")
 
 @bot.command(name="rockpaperscissors", aliases=["rps"])
 async def rps(ctx):
@@ -392,6 +394,16 @@ async def amazon(ctx):
 async def embarrasMe(ctx):
     await ctx.send(f"{random.choice(embarrass)} from {ctx.author.mention}")
 
+@bot.command(name="vote")
+@commands.has_any_role(736316576126468097) 
+async def vote(ctx, url):
+    ids = random.sample(range(1000,9999), bot.memberCount)
+    await ctx.author.send('\n'.join(map(str, ids)))
+    for member in ctx.guild.members:
+        if not member.bot:
+            id = ids.pop(0)
+            #print(f"Please Vote on {url}, your token is {id}")
+            await member.send(f"Please Vote on {url}, your token is `{id}`, please enter it in the form.")
 @bot.event
 async def on_message(message):
     # Add reaction to the suggestions
