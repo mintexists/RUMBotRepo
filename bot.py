@@ -13,7 +13,6 @@ import ast
 import requests
 
 
-
 ###---------------------------------------------------------------------------- GAME STUFF
 amazonlinks = ['https://www.amazon.com/dp/B01JKD4HYC/',
                'https://www.amazon.com/dp/B07QTHK8K9/',
