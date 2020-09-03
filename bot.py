@@ -11,7 +11,7 @@ import inspect
 from discord.ext import commands
 import ast
 import requests
-
+ 
 
 ###---------------------------------------------------------------------------- GAME STUFF
 amazonlinks = ['https://www.amazon.com/dp/B01JKD4HYC/',
