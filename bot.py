@@ -9,12 +9,10 @@ import math
 import traceback
 import inspect
 from discord.ext import commands
+from discord.ext import tasks
 import ast
 import requests
 
-
-
-###---------------------------------------------------------------------------- GAME STUFF
 amazonlinks = ['https://www.amazon.com/dp/B01JKD4HYC/',
                'https://www.amazon.com/dp/B07QTHK8K9/',
                'https://www.amazon.com/dp/045149492X/',
@@ -32,7 +30,6 @@ amazonlinks = ['https://www.amazon.com/dp/B01JKD4HYC/',
                'https://www.amazon.com/dp/B072L3GMZV/',
                'https://www.amazon.com/dp/B07HKSTWBX/',
                'https://www.amazon.com/dp/B0837JN2FC/']
-
 embarrass = ['I pissed the bed last night!',
              'I listen to 100 gecs!',
              'I have a iphone 5s!',
@@ -47,7 +44,6 @@ embarrass = ['I pissed the bed last night!',
              'I say pog irl unironically!',
              'I still say cringy unironically!',
              'I say and type XD unironically']
-###---------------------------------------------------------------------------- END OF GAME STUFF
 
 prefix = "r?"
 
@@ -57,41 +53,39 @@ bot = commands.Bot(command_prefix="r?", help_command=None, case_insensitive=True
 async def is_eva(ctx):
     return ctx.author.id == 369988289354006528
 
-# Activity 
+# Activity
+@tasks.loop(seconds=10)
 async def checkSuggestions():
-    await bot.wait_until_ready()
-    while True:
-        async for message in bot.get_channel(737807052625412208).history(oldest_first=True):
-            if get(message.reactions, emoji="✅") and get(message.reactions, emoji="❌"):
-                approvalsObject=get(message.reactions, emoji="✅")
-                denialsObject=get(message.reactions, emoji="❌")
-                approvals=approvalsObject.count-(bot.user in set(await approvalsObject.users().flatten()))      #gets # of yes reactions that isn't the bot
-                denials=denialsObject.count-(bot.user in set(await denialsObject.users().flatten()))            #gets # of no reactions that isn't the bot
-                timeLimit=datetime.timedelta(seconds=3600*(bot.memberCount)/abs(approvals**2-denials**2))       #complicated unnecessary math
-                if (message.created_at.utcnow()-message.created_at)>timeLimit:
-                    files = []
-                    url = ""
-                    for each in message.attachments:
-                        files.append(await each.to_file())
-                    if len(files) > 0:
-                        fileMessage = await bot.get_guild(700359436203458581).get_channel(718277944153210961).send(files=files)
-                        url = f"{fileMessage.attachments[0].url}\n"
-                    if approvals>denials:
-                        print("✅ Approved: \n" + message.content)
-                        try:
-                            contents = message.clean_content.split("\n", 1)
-                            await addCard("5f4d3b664357e92fc9968695", f"{contents[0]}", f"{contents[1]}\n{url}\nSuggested By: {message.author}")
-                        except:
-                            await addCard("5f4d3b664357e92fc9968695", f"{message.clean_content}", f"{url}\nSuggested By: {message.author}")
-                    else:
-                        print("❌ Denied: \n" + message.content)
-                        try:
-                            contents = message.clean_content.split("\n", 1)
-                            await addCard("5f4d577c418ce413102db964", f"{contents[0]}", f"{contents[1]}\n{url}\n\nSuggested By: {message.author}")
-                        except:
-                            await addCard("5f4d577c418ce413102db964", f"{message.clean_content}", f"{url}\nSuggested By: {message.author}")
-                    await message.delete()
-        await asyncio.sleep(5)
+    async for message in bot.get_channel(737807052625412208).history(oldest_first=True):
+        if get(message.reactions, emoji="✅") and get(message.reactions, emoji="❌"):
+            approvalsObject=get(message.reactions, emoji="✅")
+            denialsObject=get(message.reactions, emoji="❌")
+            approvals=approvalsObject.count-(bot.user in set(await approvalsObject.users().flatten()))      #gets # of yes reactions that isn't the bot
+            denials=denialsObject.count-(bot.user in set(await denialsObject.users().flatten()))            #gets # of no reactions that isn't the bot
+            timeLimit=datetime.timedelta(seconds=3600*(bot.memberCount)/abs(approvals**2-denials**2))       #complicated unnecessary math
+            if (message.created_at.utcnow()-message.created_at)>timeLimit:
+                files = []
+                url = ""
+                for each in message.attachments:
+                    files.append(await each.to_file())
+                if len(files) > 0:
+                    fileMessage = await bot.get_guild(700359436203458581).get_channel(718277944153210961).send(files=files)
+                    url = f"{fileMessage.attachments[0].url}\n"
+                if approvals>denials:
+                    print("✅ Approved: \n" + message.content)
+                    try:
+                        contents = message.clean_content.split("\n", 1)
+                        await addCard("5f4d3b664357e92fc9968695", f"{contents[0]}", f"{contents[1]}\n{url}\nSuggested By: {message.author}", ["5f4d59315382c2827ea0d0a9"])
+                    except:
+                        await addCard("5f4d3b664357e92fc9968695", f"{message.clean_content}", f"{url}\nSuggested By: {message.author}", ["5f4d59315382c2827ea0d0a9"])
+                else:
+                    print("❌ Denied: \n" + message.content)
+                    try:
+                        contents = message.clean_content.split("\n", 1)
+                        await addCard("5f4d577c418ce413102db964", f"{contents[0]}", f"{contents[1]}\n{url}\n\nSuggested By: {message.author}")
+                    except:
+                        await addCard("5f4d577c418ce413102db964", f"{message.clean_content}", f"{url}\nSuggested By: {message.author}")
+                await message.delete()
 
 
 @bot.event
@@ -99,21 +93,21 @@ async def on_ready():
     # Set Status
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Republic of United Members"))
     bot.memberCount=len([m for m in bot.get_guild(736306540671271036).members if not m.bot])
-    bot.loop.create_task(checkSuggestions())
+    checkSuggestions.start()
     # Send bot online notices
     print("Bot is online. Instance ID is " + str(randNum))
     embedVar=discord.Embed(title=":green_circle: Bot is online", color=0x00ff62)
     embedVar.add_field(name="Instance ID:", value= randNum, inline=True)
     await bot.get_channel(740049560591925362).send(embed=embedVar)
 
-async def addCard(listID, name, desc):
+async def addCard(listID, name, desc, labels=None):
     query = {
         'key': '56e5e4a9cc439b5d1eb95c16bcc67a13',
         'token': 'e13a723dc94eacf48918fdf7f0c9910b6dd54f319d18d84af4678e364af6e669',
         'idList': listID,
         'name': name,
         'desc': desc,
-        "idLabels": ["5f4d59315382c2827ea0d0a9"]
+        "idLabels": labels,
     }
 
     requests.request(
