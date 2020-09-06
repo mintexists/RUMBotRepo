@@ -390,7 +390,7 @@ async def embarrasMe(ctx):
     await ctx.send(f"{random.choice(embarrass)} from {ctx.author.mention}")
 
 @bot.command(name="vote")
-@commands.has_any_role(736316576126468097) 
+@commands.has_role(736316576126468097) 
 async def vote(ctx, url):
     ids = random.sample(range(1000,9999), bot.memberCount)
     await ctx.author.send('\n'.join(map(str, ids)))
@@ -399,6 +399,7 @@ async def vote(ctx, url):
             id = ids.pop(0)
             #print(f"Please Vote on {url}, your token is {id}")
             await member.send(f"Please Vote on {url}, your token is `{id}`, please enter it in the form.")
+
 @bot.event
 async def on_message(message):
     # Add reaction to the suggestions
@@ -408,6 +409,10 @@ async def on_message(message):
         print("New Suggestion: " + message.content)
 
     await bot.process_commands(message)
+
+@bot.event
+async def on_message_edit(before, after):
+    await bot.process_commands(after)
 
 @bot.event
 async def on_reaction_add(reaction, user):
