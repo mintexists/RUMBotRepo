@@ -10,3 +10,5 @@ r?test
 Sends the bot instance IDs
 r?rockpaperscissors or rps
 Play Rock Paper Scissors against another user or the bot
+r?connect4 or c4
+Play Connect 4 against another user
