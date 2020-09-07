@@ -400,6 +400,111 @@ async def vote(ctx, url):
             #print(f"Please Vote on {url}, your token is {id}")
             await member.send(f"Please Vote on {url}, your token is `{id}`, please enter it in the form.")
 
+@bot.command(name="connect4", aliases=["c4"])
+async def connect4(ctx, opponent : discord.Member):
+    print(opponent.display_name)
+    board = [[0,0,0,0,0,0,0,],
+            [0,0,0,0,0,0,0,],
+            [0,0,0,0,0,0,0,],
+            [0,0,0,0,0,0,0,],
+            [0,0,0,0,0,0,0,],
+            [0,0,0,0,0,0,0,]]
+    turnID = {
+        0: ctx.author.id,
+        1: opponent.id,
+    }
+    getcol = {
+        752272555875762296: 0,
+        752272555506794529: 1,
+        752272555297210588: 2,
+        752272556072894575: 3,
+        752272554915266652: 4,
+        752272555402068059: 5,
+        752272555771035769: 6,
+    }
+    turns = 1
+    msg = await ctx.send(draw(board, ctx.author.id, opponent.id))
+    for emote in [752272555875762296,752272555506794529,752272555297210588,752272556072894575,752272554915266652,752272555402068059,752272555771035769]:
+        await msg.add_reaction(bot.get_emoji(emote))
+    while True:
+        try:
+            def check(reaction, user):
+                return user.id == turnID[turns % 2] and reaction.count == 2 and reaction.custom_emoji
+            reaction, user = await bot.wait_for('reaction_add', timeout=300, check=check)
+        except asyncio.TimeoutError:
+            await ctx.send('Game Timed Out')
+            break
+        else:
+            await reaction.remove(user)
+            col = getcol[reaction.emoji.id]
+            if 0 not in board[0]:
+                await ctx.send("board full game voer")
+                break
+            if not board[0][col] == 0:
+                await ctx.send("Full slot go different ine")
+                continue
+            board = fall(board, col, user)
+            await msg.edit(content=draw(board, ctx.author.id, opponent.id))
+            if checkWin(board, user.id):
+                await ctx.send(f"{user.mention} Won!")
+                break
+            turns+=1
+
+def fall(board, col, user):
+    row = 0
+    while True:
+        if board[row][col] == 0:
+            try:
+                if board[row+1][col] == 0:
+                    row+=1
+                else:
+                    board[row][col] = user.id
+                    return board
+            except:
+                board[row][col] = user.id
+                return board
+
+def draw(board, challenger, opponent):
+    colors = {
+        challenger: "🔴",
+        opponent: "🔵",
+        0: "<:blank:752272555259461692>",
+    }
+    output = ""
+    for a in range(6):
+        for b in range(7):
+            output = f"{output}{colors[board[a][b]]}"
+        output = f"{output}\n"
+    return output
+
+def checkWin(board, piece):
+    for c in range(7-3):
+        for r in range(6):
+            if board[r][c] == piece and board[r][c+1] == piece and board[r][c+2] == piece and board[r][c+3] == piece:
+                print("horozinatl")
+                return True
+
+    # Check vertical locations for win
+    for c in range(7):
+        for r in range(6-3):
+            if board[r][c] == piece and board[r+1][c] == piece and board[r+2][c] == piece and board[r+3][c] == piece:
+                print("vertical")
+                return True
+
+    # Check positively sloped diaganols
+    for c in range(7-3):
+        for r in range(6-3):
+            if board[r][c] == piece and board[r+1][c+1] == piece and board[r+2][c+2] == piece and board[r+3][c+3] == piece:
+                print("pos slotpe")
+                return True
+
+    # Check negatively sloped diaganols
+    for c in range(7-3):
+        for r in range(3, 6):
+            if board[r][c] == piece and board[r-1][c+1] == piece and board[r-2][c+2] == piece and board[r-3][c+3] == piece:
+                print("negativ slops")
+                return True
+
 @bot.event
 async def on_message(message):
     # Add reaction to the suggestions
