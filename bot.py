@@ -475,6 +475,7 @@ def draw(board, challenger, opponent):
         for b in range(7):
             output = f"{output}{colors[board[a][b]]}"
         output = f"{output}\n"
+    output = f"{output}<:1_:752272555875762296><:2_:752272555506794529><:3_:752272555297210588><:4_:752272556072894575><:5_:752272554915266652><:6_:752272555402068059><:7_:752272555771035769>"
     return output
 
 def checkWin(board, piece):
