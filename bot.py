@@ -426,6 +426,7 @@ async def connect4(ctx, opponent : discord.Member):
     msg = await ctx.send(draw(board, ctx.author.id, opponent.id))
     for emote in [752272555875762296,752272555506794529,752272555297210588,752272556072894575,752272554915266652,752272555402068059,752272555771035769]:
         await msg.add_reaction(bot.get_emoji(emote))
+    turnMsg = await ctx.send(f"{bot.get_user(turnID[turns % 2]).mention}, it's your turn!")
     while True:
         try:
             def check(reaction, user):
@@ -435,20 +436,25 @@ async def connect4(ctx, opponent : discord.Member):
             await ctx.send('Game Timed Out')
             break
         else:
+            try:
+                await turnMsg.delete()
+            except:
+                pass
             await reaction.remove(user)
             col = getcol[reaction.emoji.id]
             if 0 not in board[0]:
-                await ctx.send("board full game voer")
+                await ctx.send("The Board is full, Game Over")
                 break
             if not board[0][col] == 0:
-                await ctx.send("Full slot go different ine")
+                await ctx.send("The slot is full, drop in a different one")
                 continue
             board = fall(board, col, user)
-            await msg.edit(content=draw(board, ctx.author.id, opponent.id))
+            await msg.edit(content=f"{draw(board, ctx.author.id, opponent.id)}")
             if checkWin(board, user.id):
                 await ctx.send(f"{user.mention} Won!")
                 break
             turns+=1
+            turnMsg = await ctx.send(f"{bot.get_user(turnID[turns % 2]).mention} it's your turn!")
 
 def fall(board, col, user):
     row = 0
@@ -475,7 +481,7 @@ def draw(board, challenger, opponent):
         for b in range(7):
             output = f"{output}{colors[board[a][b]]}"
         output = f"{output}\n"
-    output = f"{output}<:1_:752272555875762296><:2_:752272555506794529><:3_:752272555297210588><:4_:752272556072894575><:5_:752272554915266652><:6_:752272555402068059><:7_:752272555771035769>"
+    output = f"🔴 {bot.get_user(challenger).mention} -vs- 🔵 {bot.get_user(opponent).mention}\n\n{output}<:1_:752272555875762296><:2_:752272555506794529><:3_:752272555297210588><:4_:752272556072894575><:5_:752272554915266652><:6_:752272555402068059><:7_:752272555771035769>"
     return output
 
 def checkWin(board, piece):
