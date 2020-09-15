@@ -45,10 +45,10 @@ embarrass = ['I pissed the bed last night!',
              'I still say cringy unironically!',
              'I say and type XD unironically']
 
-prefix = "r?"
+prefix = "c?"
 
 randNum = random.random()
-bot = commands.Bot(command_prefix="r?", help_command=None, case_insensitive=True)
+bot = commands.Bot(command_prefix=prefix, help_command=None, case_insensitive=True)
 
 async def is_eva(ctx):
     return ctx.author.id == 369988289354006528
