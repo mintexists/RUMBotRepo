@@ -203,7 +203,7 @@ async def test(ctx):
 async def info(ctx):
     print("Info Called")
     embedVar =discord.Embed(title="Cranberry", description="Custom bot developed for a wide variety of servers.", color=0xd42027)
-    embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/755516837034197072/HIGHRESLGOO.png")
+    embedVar.set_thumbnail(url="https://raw.githubusercontent.com/enbyautumn/RUMBotRepo/master/logo.jpg")
     embedVar.add_field(name="Version -", value="2.0.1", inline=True)
     embedVar.add_field(name="Contributors -", value="evalyn#8883, pupo#0001, MrMeme#5096", inline=True)
     embedVar.set_footer(text="Any questions? DM one of the contributors!")
@@ -213,7 +213,7 @@ async def info(ctx):
 async def server(ctx):    
     print("Server Called")
     embedVar=discord.Embed(title="List of current servers.", description="Displaying the list of servers that Cranberry is in. ") #DONT CHANGE
-    embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/755516837034197072/HIGHRESLGOO.png") #DONT CHANGE
+    embedVar.set_thumbnail(url="https://raw.githubusercontent.com/enbyautumn/RUMBotRepo/master/logo.jpg") #DONT CHANGE
     embedVar.add_field(name="SERVER 1", value= ctx.guild.created_at.strftime("%b %d, %Y"), inline=True) # PUT SERVER LIST IN THIS FIELD OR COPY + PASTE TO MAKE OTHER FIELDS
     await ctx.send(embed=embedVar)
 
@@ -221,7 +221,7 @@ async def server(ctx):
 async def serverHelp(ctx):
     print("Help Called")
     embedVar=discord.Embed(title="Cranberry Command List", description="List containing all bot commands.", color=0xd42027)
-    embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/755516837034197072/HIGHRESLGOO.png")
+    embedVar.set_thumbnail(url="https://raw.githubusercontent.com/enbyautumn/RUMBotRepo/master/logo.jpg")
     num_lines = sum(1 for line in open('help.txt'))
     for helpNum in range((num_lines//2)):
         embedVar.add_field(name=await getLine('help.txt',2*helpNum+1), value=await getLine('help.txt',2*helpNum+2), inline=True)
