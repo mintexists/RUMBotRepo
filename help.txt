@@ -1,14 +1,16 @@
-r?help
+c?help
 Displays this list.
-r?info
+c?servers
+Displays servers that Cranberry is in
+c?info
 Displays bot info.
-r?coinflip or cf
+c?coinflip or cf
 Flips a coin.
-r?bubblewrap or bw
+c?bubblewrap or bw
 Makes a bubblewrap with text or emote
-r?test
+c?test
 Sends the bot instance IDs
-r?rockpaperscissors or rps
+c?rockpaperscissors or rps
 Play Rock Paper Scissors against another user or the bot
-r?connect4 or c4
+c?connect4 or c4
 Play Connect 4 against another user
