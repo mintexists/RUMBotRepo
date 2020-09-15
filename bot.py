@@ -253,7 +253,7 @@ async def bubbbleWrap(ctx, bubbleContents):
     await ctx.send(bubbleGrid, allowed_mentions=discord.AllowedMentions(everyone=False, users=False, roles=False))
 
 @bot.command(name="warn", aliases=["strike", "addwarn", "addstrike"])
-@commands.has_any_role(736316576126468097) 
+@commands.has_any_role(755565528604737686) 
 async def warn(ctx):
     warnmember = ctx.message.mentions[0]
     # If has 4 give 5 and warn
@@ -279,7 +279,7 @@ async def warn(ctx):
         await ctx.send("{} now has 1 strike".format(warnmember.mention))
 
 @bot.command(name="removewarn", aliases=["removestrike"])
-@commands.has_any_role(736316576126468097) 
+@commands.has_any_role(755565528604737686) 
 async def removewarn(ctx):
     warnmember = ctx.message.mentions[0]
     # If has 5 remove 5
@@ -307,7 +307,7 @@ async def removewarn(ctx):
         await ctx.send("{} had no strikes".format(warnmember.mention))
 
 @bot.command(name="addrole")
-@commands.has_any_role(736316576126468097)
+@commands.has_any_role(755565528604737686)
 async def addrole(ctx, *roles):
     await ctx.send("Starting...")
     for role in roles:
