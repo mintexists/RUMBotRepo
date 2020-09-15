@@ -191,19 +191,13 @@ async def eval_fn(ctx, *, cmd):
 async def test(ctx):
     print("Test Called")
     embedVar=discord.Embed(title="[ID]", description= str(randNum), color=0xd42027)
-    files = []
-    for each in ctx.message.attachments:
-        files.append(await each.to_file())
-    if len(files) > 0:
-        fileMessage = await bot.get_guild(700359436203458581).get_channel(718277944153210961).send(files=files)
-        embedVar.set_image(url = fileMessage.attachments[0].url)        
     await ctx.send(embed=embedVar)
 
 @bot.command(name='info')
 async def info(ctx):
     print("Info Called")
     embedVar =discord.Embed(title="Cranberry", description="Custom bot developed for a wide variety of servers.", color=0xd42027)
-    embedVar.set_thumbnail(url="https://github.com/enbyautumn/RUMBotRepo/blob/master/logo.jpg?raw=true")
+    embedVar.set_thumbnail(url="https://media.discordapp.net/attachments/738951182969602078/755560640076185671/logo640.png")
     embedVar.add_field(name="Version -", value="2.0.1", inline=True)
     embedVar.add_field(name="Contributors -", value="evalyn#8883, pupo#0001, MrMeme#5096", inline=True)
     embedVar.set_footer(text="Any questions? DM one of the contributors!")
@@ -213,15 +207,16 @@ async def info(ctx):
 async def server(ctx):    
     print("Server Called")
     embedVar=discord.Embed(title="List of current servers.", description="Displaying the list of servers that Cranberry is in. ") #DONT CHANGE
-    embedVar.set_thumbnail(url="https://github.com/enbyautumn/RUMBotRepo/blob/master/logo.jpg?raw=true") #DONT CHANGE
-    embedVar.add_field(name="SERVER 1", value= ctx.guild.created_at.strftime("%b %d, %Y"), inline=True) # PUT SERVER LIST IN THIS FIELD OR COPY + PASTE TO MAKE OTHER FIELDS
+    embedVar.set_thumbnail(url="https://media.discordapp.net/attachments/738951182969602078/755560640076185671/logo640.png") #DONT CHANGE
+    for guild in bot.guilds:
+        embedVar.add_field(name=guild.name, value= guild.created_at.strftime("%b %d, %Y"), inline=False)
     await ctx.send(embed=embedVar)
 
 @bot.command(name="help")
 async def serverHelp(ctx):
     print("Help Called")
     embedVar=discord.Embed(title="Cranberry Command List", description="List containing all bot commands.", color=0xd42027)
-    embedVar.set_thumbnail(url="https://github.com/enbyautumn/RUMBotRepo/blob/master/logo.jpg?raw=true")
+    embedVar.set_thumbnail(url="https://media.discordapp.net/attachments/738951182969602078/755560640076185671/logo640.png")
     num_lines = sum(1 for line in open('help.txt'))
     for helpNum in range((num_lines//2)):
         embedVar.add_field(name=await getLine('help.txt',2*helpNum+1), value=await getLine('help.txt',2*helpNum+2), inline=True)
