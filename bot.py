@@ -190,7 +190,7 @@ async def eval_fn(ctx, *, cmd):
 @bot.command(name='test')
 async def test(ctx):
     print("Test Called")
-    embedVar=discord.Embed(title="[ID]", description= str(randNum), color=0x00ff62)
+    embedVar=discord.Embed(title="[ID]", description= str(randNum), color=0xd42027)
     files = []
     for each in ctx.message.attachments:
         files.append(await each.to_file())
@@ -202,33 +202,30 @@ async def test(ctx):
 @bot.command(name='info')
 async def info(ctx):
     print("Info Called")
-    embedVar =discord.Embed(title="RUM Bot", description="Custom bot developed for the Republic of United Members discord server.", color=0xd400ff)
-    embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/740711482391658567/botpic_2.png")
-    embedVar.add_field(name="Version -", value="1.1.3", inline=True)
+    embedVar =discord.Embed(title="Cranberry", description="Custom bot developed for a wide variety of servers.", color=0xd42027)
+    embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/755516837034197072/HIGHRESLGOO.png")
+    embedVar.add_field(name="Version -", value="2.0.1", inline=True)
     embedVar.add_field(name="Contributors -", value="evalyn#8883, pupo#0001, MrMeme#5096", inline=True)
     embedVar.set_footer(text="Any questions? DM one of the contributors!")
     await ctx.send(embed=embedVar)
 
-@bot.command(name="server")
+@bot.command(name="servers")
 async def server(ctx):    
     print("Server Called")
-    embedVar=discord.Embed(title="Republic of United Members", description="Casual server focused around fairness and democracy. ")
-    embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/740711351152017458/e20176f3cfe1fc2d0edc24005d749a8b_2.png")
-    embedVar.add_field(name="Creation Date:", value= ctx.guild.created_at.strftime("%b %d, %Y"), inline=True)
-    embedVar.add_field(name="Server Age:", value= str((ctx.channel.guild.created_at.utcnow() - ctx.channel.guild.created_at).days) + " Days", inline=True)
-    embedVar.add_field(name="Member Count:", value= ctx.guild.member_count, inline=True)
-    embedVar.add_field(name="Current Consuls:", value="RaccWillAttacc#3661, FlobbsterBisque#5674", inline=True)
+    embedVar=discord.Embed(title="List of current servers.", description="Displaying the list of servers that Cranberry is in. ") #DONT CHANGE
+    embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/755516837034197072/HIGHRESLGOO.png") #DONT CHANGE
+    embedVar.add_field(name="SERVER 1", value= ctx.guild.created_at.strftime("%b %d, %Y"), inline=True) # PUT SERVER LIST IN THIS FIELD OR COPY + PASTE TO MAKE OTHER FIELDS
     await ctx.send(embed=embedVar)
 
 @bot.command(name="help")
 async def serverHelp(ctx):
     print("Help Called")
-    embedVar=discord.Embed(title="RUM Bot Command List", description="List containing all bot commands.", color=0xfb00ff)
-    embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/740711482391658567/botpic_2.png")
+    embedVar=discord.Embed(title="Cranberry Command List", description="List containing all bot commands.", color=0xd42027)
+    embedVar.set_thumbnail(url="https://cdn.discordapp.com/attachments/738951182969602078/755516837034197072/HIGHRESLGOO.png")
     num_lines = sum(1 for line in open('help.txt'))
     for helpNum in range((num_lines//2)):
         embedVar.add_field(name=await getLine('help.txt',2*helpNum+1), value=await getLine('help.txt',2*helpNum+2), inline=True)
-    embedVar.set_footer(text="Any questions? Ask one of the contributors! Any Suggestions? Put them in #suggestions!")
+    embedVar.set_footer(text="Any questions? Ask one of the contributors!")
     await ctx.send(embed=embedVar)
 
 @bot.command(name="coinflip", aliases=['cf'])
@@ -245,7 +242,7 @@ async def coinflip(ctx):
 async def rule(ctx, ruleNum : int):
     print("Rule {} Called".format(str(ruleNum)))
     if 1<=ruleNum<=9:
-        embedVar = discord.Embed(title=await getLine("rules.txt",2*ruleNum-1), description=await getLine("rules.txt",2*ruleNum), color=0xEC00FF)
+        embedVar = discord.Embed(title=await getLine("rules.txt",2*ruleNum-1), description=await getLine("rules.txt",2*ruleNum), color=0xd42027)
         await ctx.send(embed=embedVar)
     else:
         await ctx.send("Invalid Rule Number")
