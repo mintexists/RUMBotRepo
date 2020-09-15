@@ -219,7 +219,7 @@ async def serverHelp(ctx):
     embedVar.set_thumbnail(url="https://media.discordapp.net/attachments/738951182969602078/755560640076185671/logo640.png")
     num_lines = sum(1 for line in open('help.txt'))
     for helpNum in range((num_lines//2)):
-        embedVar.add_field(name=await getLine('help.txt',2*helpNum+1), value=await getLine('help.txt',2*helpNum+2), inline=True)
+        embedVar.add_field(name=await getLine('help.txt',2*helpNum+1), value=await getLine('help.txt',2*helpNum+2), inline=False)
     embedVar.set_footer(text="Any questions? Ask one of the contributors!")
     await ctx.send(embed=embedVar)
 
