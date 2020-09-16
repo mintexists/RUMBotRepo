@@ -12,6 +12,7 @@ from discord.ext import commands
 from discord.ext import tasks
 import ast
 import requests
+import aiohttp
 
 amazonlinks = ['https://www.amazon.com/dp/B01JKD4HYC/',
                'https://www.amazon.com/dp/B07QTHK8K9/',
@@ -236,8 +237,21 @@ async def coinflip(ctx):
 @bot.command(name="rule")
 async def rule(ctx, ruleNum : int):
     print("Rule {} Called".format(str(ruleNum)))
-    if 1<=ruleNum<=9:
-        embedVar = discord.Embed(title=await getLine("rules.txt",2*ruleNum-1), description=await getLine("rules.txt",2*ruleNum), color=0xd42027)
+
+    def predicate(message):
+        return message.content.startswith("RULES")
+    
+    rmsg = await get(ctx.guild.channels, name="config").history().find(predicate)
+    rurl = rmsg.attachments[0].url
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(str(rurl)) as r:
+            if r.status == 200:
+                ruleMSG = await r.text()
+    rules = ruleMSG.split("\n")
+
+    if 1<=ruleNum<=len(rules)/2:
+        embedVar = discord.Embed(title=rules[2*ruleNum-2], description=rules[2*ruleNum-1], color=0xd42027)
         await ctx.send(embed=embedVar)
     else:
         await ctx.send("Invalid Rule Number")
