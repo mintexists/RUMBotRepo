@@ -253,7 +253,7 @@ async def rule(ctx, ruleNum : int):
     if 1<=ruleNum<=len(rules)/2:
         embedVar = discord.Embed(title=rules[2*ruleNum-2], description=rules[2*ruleNum-1], color=0xd42027)
         await ctx.send(embed=embedVar)
-    else:
+    else: 
         await ctx.send("Invalid Rule Number")
 
 @bot.command(name="bubblewrap", aliases=['bw'])
