@@ -91,6 +91,56 @@ async def checkSuggestions():
 
 @bot.event
 async def on_ready():
+    def ruleCheck(message):
+        return message.content.startswith("RULES")
+    def welcomMSGCheck(message):
+        return message.content.startswith("WELCOMEMSG")
+    def welcomeRolesCheck(message):
+        return message.content.startswith("WELCOMEROLES")
+    def welcomeChannelCheck(message):
+        return message.content.startswith("WELCOMECHANNEL")
+    bot.config = {}
+    for guild in bot.guilds:
+        try:
+            url = await get(guild.channels, name="config").history().find(ruleCheck)
+            url = url.attachments[0].url
+            async with aiohttp.ClientSession() as session:
+                async with session.get(str(url)) as r:
+                    if r.status == 200:
+                        rules = await r.text()
+            bot.config[guild.id] = {"rules": rules}
+        except Exception as e:
+            print(e)
+        try:
+            url = await get(guild.channels, name="config").history().find(welcomMSGCheck)
+            url = url.attachments[0].url
+            async with aiohttp.ClientSession() as session:
+                async with session.get(str(url)) as r:
+                    if r.status == 200:
+                        welcomeMSG = await r.text()
+            bot.config[guild.id] = {"welcome": welcomeMSG}
+        except Exception as e:
+            print(e)
+        try:
+            url = await get(guild.channels, name="config").history().find(welcomeRolesCheck)
+            url = url.attachments[0].url
+            async with aiohttp.ClientSession() as session:
+                async with session.get(str(url)) as r:
+                    if r.status == 200:
+                        roleMSG = await r.text()
+            bot.config[guild.id] = {"roles": roleMSG}
+        except Exception as e:
+            print(e)
+        try:
+            url = await get(guild.channels, name="config").history().find(welcomeChannelCheck)
+            url = url.attachments[0].url
+            async with aiohttp.ClientSession() as session:
+                async with session.get(str(url)) as r:
+                    if r.status == 200:
+                        welcomeChannel = await r.text()
+            bot.config[guild.id] = {"welcomeChannel": welcomeChannel}
+        except Exception as e:
+            print(e)
     # Set Status
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="c?"))
     bot.memberCount=len([m for m in bot.get_guild(736306540671271036).members if not m.bot])
@@ -237,19 +287,8 @@ async def coinflip(ctx):
 @bot.command(name="rule")
 async def rule(ctx, ruleNum : int):
     print("Rule {} Called".format(str(ruleNum)))
-
-    def predicate(message):
-        return message.content.startswith("RULES")
-    
-    rmsg = await get(ctx.guild.channels, name="config").history().find(predicate)
-    rurl = rmsg.attachments[0].url
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(str(rurl)) as r:
-            if r.status == 200:
-                ruleMSG = await r.text()
-    rules = ruleMSG.split("\n")
-
+    rules = bot.config[ctx.guild.id]["rules"]
+    rules = rules.split("\n")
     if 1<=ruleNum<=len(rules)/2:
         embedVar = discord.Embed(title=rules[2*ruleNum-2], description=rules[2*ruleNum-1], color=0xd42027)
         await ctx.send(embed=embedVar)
@@ -552,14 +591,18 @@ async def on_reaction_remove(reaction, user):
 
 @bot.event
 async def on_member_join(member):
-    # Ping welcomer and consulate when a new member joins the server
+    '''# Ping welcomer and consulate when a new member joins the server
     if member.bot == False:
         await member.guild.get_channel(739647916905332846).send("{} has joined.\n{}".format(member.mention, member.guild.get_role(736316470098657342).mention))
         with open("roles.txt") as file_in:
             for line in file_in:
                 await member.add_roles(member.guild.get_role(int(line)))
         bot.memberCount+=1
-    print(member.name + " Joined")
+    print(member.name + " Joined")'''
+    if member.bot == False:
+        msg = bot.config[member.guild.id]["welcome"]
+        msg.format(joiner=member.mention)
+        await bot.get_channel(bot.config[member.guild.id]["welcomeChannel"]).send(msg)
 
 @bot.event
 async def on_member_leave(member):
