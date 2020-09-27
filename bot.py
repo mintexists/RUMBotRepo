@@ -360,7 +360,7 @@ async def removewarn(ctx):
         await ctx.send("{} had no strikes".format(warnmember.mention))
 
 @bot.command(name="addrole")
-@commands.has_any_role(755565528604737686)
+@commands.has_role("Staff") 
 async def addrole(ctx, *roles):
     await ctx.send("Starting...")
     for role in roles:
